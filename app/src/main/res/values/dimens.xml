@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="edit_text_height">50dp</dimen>
+    <dimen name="button_height">50dp</dimen>
+
+    <dimen name="text_size_para">17sp</dimen>
+
+    <dimen name="margin_high">32dp</dimen>
+    <dimen name="margin_medium">16dp</dimen>
+    <dimen name="margin_low">8dp</dimen>
+    <dimen name="margin_very_low">4dp</dimen>
+    <dimen name="radius_default">8dp</dimen>
+</resources>

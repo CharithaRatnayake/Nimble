@@ -6,4 +6,7 @@ package com.nimble.data
  * @brief
  * Created by CharithaRatnayake(jachratnayake@gmail.com) on 11/25/2023.
  */
-data class AppResponses(val test: String = "test")
+data class AppResponses<T>(
+    val data: T? = null,
+    val errors: List<Error>? = null
+)

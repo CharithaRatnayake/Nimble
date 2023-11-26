@@ -24,6 +24,7 @@ android {
 
     buildFeatures {
         buildConfig = true
+        dataBinding = true
     }
 
     buildTypes {
@@ -36,15 +37,21 @@ android {
     productFlavors {
         staging {
             // Define properties specific to the free flavor
-            buildConfigField("String", "BASE_URL", "\"https://survey-api-staging.nimblehq.co/api/v1\"")
+            buildConfigField("String", "BASE_URL", "\"https://survey-api-staging.nimblehq.co/api/v1/\"")
+            buildConfigField("String", "CLIENT_ID", "\"6GbE8dhoz519l2N_F99StqoOs6Tcmm1rXgda4q__rIw\"")
+            buildConfigField("String", "CLIENT_SECRET", "\"_ayfIm7BeUAhx2W1OUqi20fwO3uNxfo1QstyKlFCgHw\"")
         }
         production {
             // Define properties specific to the paid flavor
-            buildConfigField("String", "BASE_URL", "\"https://survey-api.nimblehq.co/api/v1\"")
+            buildConfigField("String", "BASE_URL", "\"https://survey-api.nimblehq.co/api/v1/\"")
+            buildConfigField("String", "CLIENT_ID", "\"6GbE8dhoz519l2N_F99StqoOs6Tcmm1rXgda4q__rIw\"")
+            buildConfigField("String", "CLIENT_SECRET", "\"_ayfIm7BeUAhx2W1OUqi20fwO3uNxfo1QstyKlFCgHw\"")
         }
         mock {
             // Define properties specific to the paid flavor
-            buildConfigField("String", "BASE_URL", "\"https://nimble-survey-web-mock.fly.dev\"")
+            buildConfigField("String", "BASE_URL", "\"https://nimble-survey-web-mock.fly.dev/\"")
+            buildConfigField("String", "CLIENT_ID", "\"6GbE8dhoz519l2N_F99StqoOs6Tcmm1rXgda4q__rIw\"")
+            buildConfigField("String", "CLIENT_SECRET", "\"_ayfIm7BeUAhx2W1OUqi20fwO3uNxfo1QstyKlFCgHw\"")
         }
     }
     compileOptions {
@@ -65,6 +72,10 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.2'
     implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.10.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.2'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
