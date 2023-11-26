@@ -1,13 +1,19 @@
 package com.nimble.di
 
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.nimble.BuildConfig
+import com.nimble.base.AppConstants
 import com.nimble.data.remote.NimbleAppApi
 import com.nimble.data.remote.NimbleAuthApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -24,6 +30,10 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class AppModule {
+
+    private val Context.userDataStore: DataStore<Preferences> by preferencesDataStore(
+        name = AppConstants.APP_DATASTORE_NAME
+    )
 
     @Provides
     fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
@@ -60,6 +70,14 @@ class AppModule {
     @Provides
     fun providesAppApi(retrofit: Retrofit): NimbleAppApi {
         return retrofit.create(NimbleAppApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserDataStorePreferences(
+        @ApplicationContext applicationContext: Context
+    ): DataStore<Preferences> {
+        return applicationContext.userDataStore
     }
 
 }

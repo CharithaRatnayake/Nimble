@@ -1,11 +1,11 @@
-package com.nimble.ui.auth.ui.register
+package com.nimble.ui.auth.register
 
 import androidx.lifecycle.ViewModelProvider
 import com.nimble.R
 import com.nimble.base.BaseFragment
 import com.nimble.data.Resource
 import com.nimble.databinding.FragmentRegisterBinding
-import com.nimble.ui.auth.ui.AuthViewModel
+import com.nimble.ui.auth.AuthViewModel
 import com.nimble.utils.ValidatorUtil
 import dagger.hilt.android.AndroidEntryPoint
 

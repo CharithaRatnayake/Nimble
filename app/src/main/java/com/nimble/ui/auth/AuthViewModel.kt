@@ -1,4 +1,4 @@
-package com.nimble.ui.auth.ui
+package com.nimble.ui.auth
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -13,6 +13,7 @@ import com.nimble.data.LoginResponseDataModel
 import com.nimble.data.RegisterRequestDataModel
 import com.nimble.data.Resource
 import com.nimble.data.UserDataModel
+import com.nimble.data.local.UserPreferencesRepository
 import com.nimble.data.remote.RemoteAuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -20,7 +21,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val authRepository: RemoteAuthRepository, private val gson: Gson
+    private val authRepository: RemoteAuthRepository,
+    private val gson: Gson,
+    private val userPreferencesRepository: UserPreferencesRepository
 ) : ViewModel() {
 
     private val _authLoginResponse = MutableLiveData<Resource<LoginResponseDataModel>>()
@@ -45,6 +48,11 @@ class AuthViewModel @Inject constructor(
                 val body = response.body()
                 _authLoginResponse.value =
                     Resource(Resource.Status.SUCCESS, body, response.message())
+
+                body?.let {
+                    userPreferencesRepository.saveUserData("", email, it.data.attributes.accessToken, it.data.attributes.refreshToken)
+                }
+
             } else {
                 val errorBody = response.errorBody()?.string()
                 val error: LoginResponseDataModel =
