@@ -12,7 +12,7 @@ class AppConstants {
         const val API_PATH_REGISTRATION = "registrations"
         const val API_PATH_AUTH_TOKEN = "oauth/token"
         const val API_PATH_LOGOUT = "oauth/revoke"
-        const val API_PATH_FORGOT_PASSWORD = "password"
+        const val API_PATH_FORGOT_PASSWORD = "passwords"
         const val REQUEST_BODY_GRANT_TYPE_PASSWORD = "password"
         const val REQUEST_BODY_GRANT_TYPE_REFRESH_TOKEN = "refresh_token"
     }

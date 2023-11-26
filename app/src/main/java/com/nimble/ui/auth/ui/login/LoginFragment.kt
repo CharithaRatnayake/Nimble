@@ -32,6 +32,9 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
         binding.btnRegister.setOnClickListener {
             getCurrentActivity<AuthActivity>()?.startRegisterFragment()
         }
+        binding.btnReset.setOnClickListener {
+            getCurrentActivity<AuthActivity>()?.startForgotPasswordFragment()
+        }
     }
 
     override fun initViewModel() {

@@ -7,11 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.nimble.data.AppResponses
 import com.nimble.data.AuthTokenDataModel
+import com.nimble.data.ForgotPasswordResponseDataModel
+import com.nimble.data.LoginResponseDataModel
 import com.nimble.data.RegisterRequestDataModel
 import com.nimble.data.Resource
-import com.nimble.data.TokenResponse
 import com.nimble.data.UserDataModel
 import com.nimble.data.remote.RemoteAuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,13 +20,16 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val authRepository: RemoteAuthRepository,
-    private val gson: Gson
+    private val authRepository: RemoteAuthRepository, private val gson: Gson
 ) : ViewModel() {
 
-    private val _authLoginResponse = MutableLiveData<Resource<AppResponses<TokenResponse>>>()
+    private val _authLoginResponse = MutableLiveData<Resource<LoginResponseDataModel>>()
 
-    val authLoginResponse: LiveData<Resource<AppResponses<TokenResponse>>> = _authLoginResponse
+    val authLoginResponse: LiveData<Resource<LoginResponseDataModel>> = _authLoginResponse
+
+    private val _authResetResponse = MutableLiveData<Resource<ForgotPasswordResponseDataModel>>()
+
+    val authResetResponse: LiveData<Resource<ForgotPasswordResponseDataModel>> = _authResetResponse
 
     fun login(email: String, password: String) {
         Log.d(javaClass.simpleName, "login: email:$email and password:$password")
@@ -38,13 +41,16 @@ class AuthViewModel @Inject constructor(
         viewModelScope.launch {
             val response = authRepository.login(authTokenDataModel)
 
-            if (response.isSuccessful){
+            if (response.isSuccessful) {
                 val body = response.body()
-                _authLoginResponse.value = Resource(Resource.Status.SUCCESS, body, response.message())
-            } else{
+                _authLoginResponse.value =
+                    Resource(Resource.Status.SUCCESS, body, response.message())
+            } else {
                 val errorBody = response.errorBody()?.string()
-                val error: AppResponses<TokenResponse> = gson.fromJson(errorBody, object : TypeToken<AppResponses<TokenResponse>>() {}.type)
-                _authLoginResponse.value = Resource(Resource.Status.ERROR, error, response.message())
+                val error: LoginResponseDataModel =
+                    gson.fromJson(errorBody, object : TypeToken<LoginResponseDataModel>() {}.type)
+                _authLoginResponse.value =
+                    Resource(Resource.Status.ERROR, error, response.message())
             }
         }
     }
@@ -59,16 +65,24 @@ class AuthViewModel @Inject constructor(
             )
         )
         return
-        //API does not send a success object
-        viewModelScope.launch {
-            val response = authRepository.register(registerRequestDataModel)
+        //TODO API does not send a success object
 
-            if (response.isSuccessful){
-                _authLoginResponse.value = Resource(Resource.Status.SUCCESS, null, response.message())
-            } else{
-                val errorBody = response.errorBody()?.string()
-                val error: AppResponses<TokenResponse> = gson.fromJson(errorBody, object : TypeToken<AppResponses<TokenResponse>>() {}.type)
-                _authLoginResponse.value = Resource(Resource.Status.ERROR, error, response.message())
+    }
+
+    fun reset(email: String) {
+        Log.d(javaClass.simpleName, "reset: email:$email")
+
+        _authResetResponse.value = Resource.loading()
+        val registerRequestDataModel = RegisterRequestDataModel(
+            UserDataModel(email = email)
+        )
+        viewModelScope.launch {
+            val response = authRepository.forgotPassword(registerRequestDataModel)
+
+            if (response.isSuccessful) {
+                val body = response.body()
+                _authResetResponse.value =
+                    Resource(Resource.Status.SUCCESS, body, response.message())
             }
         }
     }

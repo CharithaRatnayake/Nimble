@@ -3,6 +3,8 @@ package com.nimble.data.remote
 import com.nimble.BuildConfig
 import com.nimble.data.AppResponses
 import com.nimble.data.AuthTokenDataModel
+import com.nimble.data.ForgotPasswordResponseDataModel
+import com.nimble.data.LoginResponseDataModel
 import com.nimble.data.RegisterRequestDataModel
 import com.nimble.data.TokenResponse
 import com.nimble.data.UserDataModel
@@ -21,7 +23,7 @@ class RemoteAuthRepository @Inject constructor(private val api: NimbleAuthApi) {
 
     suspend fun login(
         authTokenDataModel: AuthTokenDataModel
-    ): Response<AppResponses<TokenResponse>> {
+    ): Response<LoginResponseDataModel> {
         return api.token(authTokenDataModel)
     }
 
@@ -38,9 +40,9 @@ class RemoteAuthRepository @Inject constructor(private val api: NimbleAuthApi) {
     }
 
     suspend fun forgotPassword(
-        userDataModel: UserDataModel
-    ): AppResponses<TokenResponse> {
-        return api.forgotPassword(userDataModel)
+        registerRequestDataModel: RegisterRequestDataModel
+    ): Response<ForgotPasswordResponseDataModel> {
+        return api.forgotPassword(registerRequestDataModel)
     }
 
 }

@@ -7,6 +7,5 @@ import com.nimble.databinding.ActivityAuthBinding
 class MainActivity : BaseActivity<ActivityAuthBinding>(R.layout.activity_auth) {
 
     override fun initialize() {
-        TODO("Not yet implemented")
     }
 }

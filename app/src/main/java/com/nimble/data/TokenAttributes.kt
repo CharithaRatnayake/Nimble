@@ -10,13 +10,13 @@ import com.google.gson.annotations.SerializedName
  */
 data class TokenAttributes(
     @SerializedName("access_token")
-    val accessToken: String,
+    val accessToken: String = "",
     @SerializedName("token_type")
-    val tokenType: String,
+    val tokenType: String = "",
     @SerializedName("expires_in")
-    val expiresIn: Long,
+    val expiresIn: Long = 0,
     @SerializedName("refresh_token")
-    val refreshToken: String,
+    val refreshToken: String = "",
     @SerializedName("created_at")
-    val createdAt: Long
+    val createdAt: Long = 0
 )
