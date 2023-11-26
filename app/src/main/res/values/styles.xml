@@ -11,10 +11,19 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:textColorHint">@color/color_edit_text_hint</item>
         <item name="android:background">@drawable/bg_edittext_default</item>
+        <item name="android:imeOptions">actionNext</item>
     </style>
 
     <style name="EditTextEmail" parent="EditText">
         <item name="android:inputType">textEmailAddress</item>
+    </style>
+
+    <style name="EditTextName" parent="EditText">
+        <item name="android:inputType">textPersonName|textCapWords</item>
+    </style>
+
+    <style name="EditTextPassword" parent="EditText">
+        <item name="android:inputType">textPassword</item>
     </style>
 
     <style name="Button">

@@ -1,13 +1,13 @@
-package com.nimble.ui.auth.ui.login
+package com.nimble.ui.auth.ui.forgotpassword
 
 import androidx.lifecycle.ViewModelProvider
 import com.nimble.R
 import com.nimble.base.BaseFragment
 import com.nimble.data.Resource
+import com.nimble.databinding.FragmentForgotPasswordBinding
 import com.nimble.databinding.FragmentLoginBinding
 import com.nimble.ui.auth.AuthActivity
 import com.nimble.ui.auth.ui.AuthViewModel
-import com.nimble.utils.ValidatorUtil
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -17,17 +17,17 @@ import dagger.hilt.android.AndroidEntryPoint
  * Created by CharithaRatnayake(jachratnayake@gmail.com) on 11/25/2023.
  */
 @AndroidEntryPoint
-class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login) {
+class ForgotPasswordFragment : BaseFragment<FragmentForgotPasswordBinding>(R.layout.fragment_forgot_password) {
 
     companion object {
-        fun newInstance() = LoginFragment()
+        fun newInstance() = ForgotPasswordFragment()
     }
 
     private lateinit var viewModel: AuthViewModel
 
     override fun initUI() {
         binding.btnLogIn.setOnClickListener {
-            login()
+            viewModel.login(binding.editTextEmail.text.toString(), binding.editTextPassword.text.toString())
         }
         binding.btnRegister.setOnClickListener {
             getCurrentActivity<AuthActivity>()?.startRegisterFragment()
@@ -57,26 +57,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
                 }
             }
         }
-    }
-
-    private fun login() {
-        val email = binding.editTextEmail.text.toString()
-        val password = binding.editTextPassword.text.toString()
-
-        val validator = ValidatorUtil()
-
-        if (!validator.isEmailValid(email)) {
-            showError(getString(R.string.error_valid_email))
-            return
-        }
-        if (!validator.isPasswordValid(password)) {
-            showError(getString(R.string.error_valid_password))
-            return
-        }
-
-        viewModel.login(
-            email, password
-        )
     }
 
 }

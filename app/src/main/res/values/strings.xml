@@ -5,4 +5,14 @@
     <string name="forgot">Forgot?</string>
     <string name="log_in">Log in</string>
     <string name="create_new_nimble_account">Create new nimble account</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="name">Name</string>
+    <string name="re_type_password">Re-type Password</string>
+    <string name="register">Register</string>
+    <string name="reset">Reset</string>
+    <string name="error_valid_name">Please enter valid name.</string>
+    <string name="error_valid_email">Please enter valid email address.</string>
+    <string name="error_valid_password">Password length should be minimum 6. Please enter valid password.</string>
+    <string name="error_valid_password_retype">Passwords do not match. Please re-type the passwords.\n</string>
 </resources>

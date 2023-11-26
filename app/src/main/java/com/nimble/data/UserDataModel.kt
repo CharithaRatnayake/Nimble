@@ -13,7 +13,7 @@ data class UserDataModel(
     @SerializedName("name") var name: String,
     @SerializedName("password") var password: String,
     @SerializedName("password_confirmation") var passwordConfirmation: String
-) {
+): HeaderDataModel(){
     constructor() : this(
         email = "", name = "", password = "", passwordConfirmation = ""
     )

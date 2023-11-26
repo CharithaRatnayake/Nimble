@@ -3,8 +3,12 @@ package com.nimble.data.remote
 import com.nimble.BuildConfig
 import com.nimble.data.AppResponses
 import com.nimble.data.AuthTokenDataModel
+import com.nimble.data.RegisterRequestDataModel
 import com.nimble.data.TokenResponse
 import com.nimble.data.UserDataModel
+import okhttp3.ResponseBody
+import org.json.JSONObject
+import retrofit2.Response
 import javax.inject.Inject
 
 /**
@@ -17,14 +21,14 @@ class RemoteAuthRepository @Inject constructor(private val api: NimbleAuthApi) {
 
     suspend fun login(
         authTokenDataModel: AuthTokenDataModel
-    ): AppResponses<TokenResponse> {
+    ): Response<AppResponses<TokenResponse>> {
         return api.token(authTokenDataModel)
     }
 
     suspend fun register(
-        userDataModel: UserDataModel
-    ): AppResponses<TokenResponse> {
-        return api.registrations(userDataModel, BuildConfig.CLIENT_ID, BuildConfig.CLIENT_SECRET)
+        registerRequestDataModel: RegisterRequestDataModel
+    ): Response<AppResponses<TokenResponse>> {
+        return api.registrations(registerRequestDataModel)
     }
 
     suspend fun logout(
@@ -36,7 +40,7 @@ class RemoteAuthRepository @Inject constructor(private val api: NimbleAuthApi) {
     suspend fun forgotPassword(
         userDataModel: UserDataModel
     ): AppResponses<TokenResponse> {
-        return api.forgotPassword(userDataModel, BuildConfig.CLIENT_ID, BuildConfig.CLIENT_SECRET)
+        return api.forgotPassword(userDataModel)
     }
 
 }
