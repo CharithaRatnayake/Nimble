@@ -27,9 +27,13 @@ class AppConstants {
 
         //Data store
         const val APP_DATASTORE_NAME = "com.nimble.user_preferences"
-        const val DATASTORE_KEY_NAME = "name"
-        const val DATASTORE_KEY_EMAIL = "email"
+        const val APP_DATABASE_NAME = "NimbleDatabase"
+        const val DATASTORE_KEY_IS_LOGGED = "isLogged"
+        const val DATASTORE_KEY_EXPIRE_IN = "expire_in"
         const val DATASTORE_KEY_ACCESS_TOKEN = "access_token"
         const val DATASTORE_KEY_REFRESH_TOKEN = "refresh_token"
+
+        const val CLIENT_ID = "NkdiRThkaG96NTE5bDJOX0Y5OVN0cW9PczZUY21tMXJYZ2RhNHFfX3JJdw=="
+        const val CLIENT_SECRET = "X2F5ZkltN0JlVUFoeDJXMU9VcWkyMGZ3TzN1TnhmbzFRc3R5S2xGQ2dIdw=="
     }
 }

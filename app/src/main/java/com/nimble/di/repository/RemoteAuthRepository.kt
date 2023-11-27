@@ -1,12 +1,12 @@
-package com.nimble.data.remote
+package com.nimble.di.repository
 
-import com.nimble.BuildConfig
 import com.nimble.data.AppResponses
 import com.nimble.data.AuthTokenDataModel
 import com.nimble.data.ForgotPasswordResponseDataModel
 import com.nimble.data.LoginResponseDataModel
 import com.nimble.data.RegisterRequestDataModel
 import com.nimble.data.TokenResponse
+import com.nimble.data.remote.NimbleAuthApi
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -31,9 +31,9 @@ class RemoteAuthRepository @Inject constructor(private val api: NimbleAuthApi) {
     }
 
     suspend fun logout(
-        token: String
-    ): AppResponses<TokenResponse> {
-        return api.logout(token, BuildConfig.CLIENT_ID, BuildConfig.CLIENT_SECRET)
+        authTokenDataModel: AuthTokenDataModel
+    ): Response<TokenResponse> {
+        return api.logout(authTokenDataModel)
     }
 
     suspend fun forgotPassword(

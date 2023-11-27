@@ -13,9 +13,10 @@ import com.nimble.data.LoginResponseDataModel
 import com.nimble.data.RegisterRequestDataModel
 import com.nimble.data.Resource
 import com.nimble.data.UserDataModel
-import com.nimble.data.local.UserPreferencesRepository
-import com.nimble.data.remote.RemoteAuthRepository
+import com.nimble.di.repository.UserPreferencesRepository
+import com.nimble.di.repository.RemoteAuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -34,6 +35,10 @@ class AuthViewModel @Inject constructor(
 
     val authResetResponse: LiveData<Resource<ForgotPasswordResponseDataModel>> = _authResetResponse
 
+    private val _authLogoutResponse = MutableLiveData<Boolean>()
+
+    val authLogoutResponse: LiveData<Boolean> = _authLogoutResponse
+
     fun login(email: String, password: String) {
         Log.d(javaClass.simpleName, "login: email:$email and password:$password")
 
@@ -50,7 +55,13 @@ class AuthViewModel @Inject constructor(
                     Resource(Resource.Status.SUCCESS, body, response.message())
 
                 body?.let {
-                    userPreferencesRepository.saveUserData("", email, it.data.attributes.accessToken, it.data.attributes.refreshToken)
+                    val expireIn = it.data.attributes.expiresIn + it.data.attributes.createdAt
+                    userPreferencesRepository.saveUserData(
+                        true,
+                        expireIn,
+                        it.data.attributes.accessToken,
+                        it.data.attributes.refreshToken
+                    )
                 }
 
             } else {
@@ -91,6 +102,27 @@ class AuthViewModel @Inject constructor(
                 val body = response.body()
                 _authResetResponse.value =
                     Resource(Resource.Status.SUCCESS, body, response.message())
+            }
+        }
+    }
+
+    fun logout() {
+        Log.d(javaClass.simpleName, "logout")
+        viewModelScope.launch {
+            val token = userPreferencesRepository.accessToken.firstOrNull()
+
+            token?.let {
+                val response = authRepository.logout(AuthTokenDataModel(
+                    token = token
+                ))
+
+                if (response.isSuccessful) {
+                    Log.d(javaClass.simpleName, "logout: User successfully logged out.")
+                    userPreferencesRepository.clearDataStore()
+                    _authLogoutResponse.value = true
+                } else {
+                    _authLogoutResponse.value = false
+                }
             }
         }
     }

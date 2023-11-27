@@ -1,10 +1,14 @@
 package com.nimble.ui.splash
 
+import android.util.Log
 import androidx.lifecycle.ViewModelProvider
+import com.nimble.BuildConfig
+import com.nimble.base.AppConstants
 import com.nimble.base.BaseActivity
 import com.nimble.databinding.ActivitySplashBinding
 import com.nimble.ui.auth.AuthActivity
 import com.nimble.ui.main.SliderActivity
+import com.nimble.utils.Base64Util
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

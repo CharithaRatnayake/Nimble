@@ -5,6 +5,7 @@ import com.nimble.R
 import com.nimble.base.BaseActivity
 import com.nimble.data.SurveyAttributeDataModel
 import com.nimble.databinding.ActivitySurveyBinding
+import com.nimble.ui.main.questions.QuestionsFragment
 import com.nimble.ui.main.surveys.SurveysListFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -33,5 +34,9 @@ class SurveyActivity : BaseActivity<ActivitySurveyBinding>(R.layout.activity_sur
                 startFragment(R.id.container, SurveyFragment.newInstance(it))
             }
         }
+    }
+
+    fun startQuestionsFragment(id: String) {
+        startFragment(R.id.container, QuestionsFragment.newInstance(id))
     }
 }

@@ -1,73 +1,126 @@
 package com.nimble.di
 
-import android.content.Context
+import android.util.Log
 import com.nimble.BuildConfig
+import com.nimble.base.AppConstants
 import com.nimble.data.AuthTokenDataModel
 import com.nimble.data.GrantType
-import com.nimble.data.local.UserPreferencesRepository
 import com.nimble.data.remote.NimbleAuthApi
+import com.nimble.di.repository.UserPreferencesRepository
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
+import okhttp3.OkHttpClient
 import okhttp3.Response
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Inject
 
-class AuthInterceptor constructor(private val userPreferencesRepository: UserPreferencesRepository) : Interceptor {
-    // Other interceptor configuration and properties
-
+/**
+ * @file AuthInterceptor.kt
+ * @date 11/27/2023
+ * @brief AuthInterceptor for refresh the token
+ * Created by Charitha Ratnayake(jachratnayake@gmail.com) on 11/27/2023.
+ */
+class AuthInterceptor(
+    private val userPreferencesRepository: UserPreferencesRepository
+) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        val originalRequest = chain.request()
-//        userPreferencesRepository.accessToken.collect { accessToken->
-//            if (!accessToken.isNullOrEmpty()){
-//
-//            }
-//        }
+        val request = chain.request()
 
-        runBlocking {
+        val isLogged = runBlocking { userPreferencesRepository.isLogged.first() }
 
-            userPreferencesRepository.refreshToken.collect {
-                if (!it.isNullOrEmpty()) {
-                    val auth = AuthTokenDataModel(
-                        grantType = GrantType.REFRESH_TOKEN.value,
-                        refresh_token = it
+        if (isLogged) {
+            val authToken = runBlocking { userPreferencesRepository.authToken.firstOrNull() }
+
+            authToken?.let {
+                val newRequest = request.newBuilder()
+                    .header(
+                        "Authorization",
+                        "Bearer ${it[AppConstants.DATASTORE_KEY_ACCESS_TOKEN]}"
                     )
-                    val response = Retrofit.Builder()
-                        .baseUrl(BuildConfig.BASE_URL)
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build().create(NimbleAuthApi::class.java).token(auth)
+                    .build()
 
-                    if (response.isSuccessful){
+                val response = chain.proceed(newRequest)
 
-                    }else{
+                if (response.code == 401) {
+                    response.close()
+                    Log.e(javaClass.simpleName, "Auth token expired.")
 
+                    // Handle token refresh here asynchronously
+                    runBlocking {
+                        refreshTokenAsync(userPreferencesRepository)
                     }
+
+
+                    val newAuthToken =
+                        runBlocking { userPreferencesRepository.authToken.firstOrNull() }
+                    // Retry the request with the new token
+                    return chain.proceed(
+                        newRequest.newBuilder()
+                            .header(
+                                "Authorization",
+                                "Bearer ${newAuthToken?.get(AppConstants.DATASTORE_KEY_ACCESS_TOKEN)}"
+                            )
+                            .build()
+                    )
                 }
+
+                return response
             }
-
-
         }
 
-//        if (accessToken != null && sessionManager.isAccessTokenExpired()) {
-//            val refreshToken = sessionManager.getRefreshToken()
-//
-//            if (refreshedToken != null) {
-//                // Create a new request with the refreshed access token
-//                val newRequest = originalRequest.newBuilder()
-//                    .header("Authorization", "Bearer refreshedToken")
-//                    .build()
-//
-//                // Retry the request with the new access token
-//                return chain.proceed(newRequest)
-//            }
-//        }
+        // Handle the case where the user is not logged in
+        return chain.proceed(request)
+    }
 
-        // Add the access token to the request header
-        val authorizedRequest = originalRequest.newBuilder()
-            .header("Authorization", "Bearer accessToken")
+    private suspend fun refreshTokenAsync(userPreferencesRepository: UserPreferencesRepository) {
+        val interceptor = HttpLoggingInterceptor()
+        interceptor.level = HttpLoggingInterceptor.Level.BODY
+
+        val client = OkHttpClient.Builder()
+            .addInterceptor(interceptor)
             .build()
 
-        return chain.proceed(authorizedRequest)
+        val retrofit = Retrofit.Builder()
+            .baseUrl(BuildConfig.BASE_URL)
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val refreshToken = userPreferencesRepository.authToken.firstOrNull()
+            ?.get(AppConstants.DATASTORE_KEY_REFRESH_TOKEN)
+        refreshToken?.let {
+            val authData = AuthTokenDataModel(
+                grantType = GrantType.REFRESH_TOKEN.value,
+                refresh_token = it
+            )
+
+            try {
+                val authResponse = retrofit.create(NimbleAuthApi::class.java).token(authData)
+
+                if (authResponse.isSuccessful) {
+                    authResponse.body()?.let {
+                        val expireIn = it.data.attributes.expiresIn + it.data.attributes.createdAt
+                        val newAccessToken = it.data.attributes.accessToken
+
+                        userPreferencesRepository.saveUserData(
+                            true,
+                            expireIn,
+                            newAccessToken,
+                            it.data.attributes.refreshToken
+                        )
+                    }
+                } else {
+                    Log.e(javaClass.simpleName, "Error while refresh the token.")
+                    userPreferencesRepository.clearDataStore()
+                }
+            } catch (e: Exception) {
+                Log.e(javaClass.simpleName, "Error refreshing token: ${e.message}")
+                userPreferencesRepository.clearDataStore()
+            }
+        }
     }
 }

@@ -1,7 +1,8 @@
-package com.nimble.data.remote
+package com.nimble.di.repository
 
 import com.nimble.data.SurveyListResponseDataModel
 import com.nimble.data.UserResponseDataModel
+import com.nimble.data.remote.NimbleAppApi
 import retrofit2.Response
 import javax.inject.Inject
 

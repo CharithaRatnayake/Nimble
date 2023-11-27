@@ -2,6 +2,8 @@ package com.nimble.data
 
 import com.google.gson.annotations.SerializedName
 import com.nimble.BuildConfig
+import com.nimble.base.AppConstants
+import com.nimble.utils.Base64Util
 
 /**
  * @file AuthTokenDataModel
@@ -14,6 +16,7 @@ data class AuthTokenDataModel(
     @SerializedName("refresh_token") var refresh_token: String = "",
     @SerializedName("email") var email: String = "",
     @SerializedName("password") var password: String = "",
-    @SerializedName("client_id") var clientId: String = BuildConfig.CLIENT_ID,
-    @SerializedName("client_secret") var clientSecret: String = BuildConfig.CLIENT_SECRET
+    @SerializedName("token") var token: String = "",
+    @SerializedName("client_id") var clientId: String = Base64Util.base64ToString(AppConstants.CLIENT_ID),
+    @SerializedName("client_secret") var clientSecret: String = Base64Util.base64ToString(AppConstants.CLIENT_SECRET)
 )

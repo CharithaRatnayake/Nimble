@@ -34,6 +34,11 @@ class SurveyFragment :
     }
 
     override fun initUI() {
+        binding.btnStartSurvey.setOnClickListener {
+            dataModel?.let {
+                getCurrentActivity<SurveyActivity>()?.startQuestionsFragment(it.id)
+            }
+        }
         dataModel?.let { loadSurveyData(it.attributes) }
     }
 

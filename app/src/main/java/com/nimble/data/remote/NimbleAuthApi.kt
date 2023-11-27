@@ -29,11 +29,7 @@ interface NimbleAuthApi {
     suspend fun token(@Body authTokenDataModel: AuthTokenDataModel): Response<LoginResponseDataModel>
 
     @POST(AppConstants.API_PATH_LOGOUT)
-    suspend fun logout(
-        @Field("token") token: String,
-        @Field("client_id") clientId: String,
-        @Field("client_secret") clientSecret: String
-    ): AppResponses<TokenResponse>
+    suspend fun logout(@Body authTokenDataModel: AuthTokenDataModel): Response<TokenResponse>
 
     @POST(AppConstants.API_PATH_FORGOT_PASSWORD)
     suspend fun forgotPassword(
