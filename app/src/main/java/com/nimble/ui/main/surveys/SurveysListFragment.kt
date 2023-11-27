@@ -85,7 +85,6 @@ class SurveysListFragment :
 
                 Resource.Status.SUCCESS -> {
                     data.data?.let { loadProfileData(it) }
-                    viewModel.getCacheSurveys()
                 }
 
                 Resource.Status.ERROR -> {
@@ -109,6 +108,7 @@ class SurveysListFragment :
                 }
             }
         }
+        viewModel.getCacheSurveys()
         viewModel.getUserProfile()
     }
 

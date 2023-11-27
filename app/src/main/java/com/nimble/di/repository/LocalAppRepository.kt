@@ -22,4 +22,8 @@ class LocalAppRepository @Inject constructor(
         return surveyDao.getAllSurveys()
     }
 
+    suspend fun deleteAllSurveys() {
+        surveyDao.deleteAllSurveys()
+    }
+
 }

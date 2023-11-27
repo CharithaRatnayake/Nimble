@@ -13,6 +13,7 @@ import com.nimble.data.LoginResponseDataModel
 import com.nimble.data.RegisterRequestDataModel
 import com.nimble.data.Resource
 import com.nimble.data.UserDataModel
+import com.nimble.di.repository.LocalAppRepository
 import com.nimble.di.repository.UserPreferencesRepository
 import com.nimble.di.repository.RemoteAuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,7 +25,8 @@ import javax.inject.Inject
 class AuthViewModel @Inject constructor(
     private val authRepository: RemoteAuthRepository,
     private val gson: Gson,
-    private val userPreferencesRepository: UserPreferencesRepository
+    private val userPreferencesRepository: UserPreferencesRepository,
+    private val localAppRepository: LocalAppRepository
 ) : ViewModel() {
 
     private val _authLoginResponse = MutableLiveData<Resource<LoginResponseDataModel>>()
@@ -119,6 +121,7 @@ class AuthViewModel @Inject constructor(
                 if (response.isSuccessful) {
                     Log.d(javaClass.simpleName, "logout: User successfully logged out.")
                     userPreferencesRepository.clearDataStore()
+                    localAppRepository.deleteAllSurveys()
                     _authLogoutResponse.value = true
                 } else {
                     _authLogoutResponse.value = false

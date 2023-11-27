@@ -21,4 +21,7 @@ interface SurveyDao {
     @Query("SELECT * FROM survey")
     suspend fun getAllSurveys(): List<SurveyEntity>
 
+    @Query("DELETE FROM survey")
+    suspend fun deleteAllSurveys()
+
 }

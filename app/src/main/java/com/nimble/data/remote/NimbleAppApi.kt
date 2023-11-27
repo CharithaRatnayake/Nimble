@@ -34,7 +34,5 @@ interface NimbleAppApi {
     suspend fun getSurveysDetails(@Path("id") mApplianceId: String): AppResponses<TokenResponse>
 
     @POST("/responses")
-    suspend fun submitSurveys(
-        @Body surveysDataModel: SurveysDataModel
-    ): AppResponses<TokenResponse>
+    suspend fun submitSurveys(): AppResponses<TokenResponse>
 }
