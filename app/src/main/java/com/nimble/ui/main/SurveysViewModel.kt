@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nimble.data.Resource
 import com.nimble.data.SurveyAttributeDataModel
-import com.nimble.data.SurveyListResponseDataModel
 import com.nimble.data.UserDataModel
 import com.nimble.data.local.SurveyEntity
 import com.nimble.di.repository.LocalAppRepository
@@ -39,7 +38,11 @@ class SurveysViewModel @Inject constructor(
             if (response.isSuccessful) {
                 val body = response.body()
                 _userProfileResponse.value =
-                    Resource(Resource.Status.SUCCESS, body?.userDataModel?.attributes, response.message())
+                    Resource(
+                        Resource.Status.SUCCESS,
+                        body?.userDataModel?.attributes,
+                        response.message()
+                    )
             }
         }
     }

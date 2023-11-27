@@ -3,11 +3,9 @@ package com.nimble.data.remote
 import com.nimble.base.AppConstants
 import com.nimble.data.AppResponses
 import com.nimble.data.SurveyListResponseDataModel
-import com.nimble.data.SurveysDataModel
 import com.nimble.data.TokenResponse
 import com.nimble.data.UserResponseDataModel
 import retrofit2.Response
-import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -26,8 +24,8 @@ interface NimbleAppApi {
 
     @GET(AppConstants.API_PATH_GET_SURVEYS_LIST)
     suspend fun getSurveys(
-        @Query(AppConstants.API_QUERY_PAGE_NUMBER, encoded=true) pageNumber: Int,
-        @Query(AppConstants.API_QUERY_PAGE_SIZE, encoded=true) pageSize: Int
+        @Query(AppConstants.API_QUERY_PAGE_NUMBER, encoded = true) pageNumber: Int,
+        @Query(AppConstants.API_QUERY_PAGE_SIZE, encoded = true) pageSize: Int
     ): Response<SurveyListResponseDataModel>
 
     @POST("/surveys/{id}")

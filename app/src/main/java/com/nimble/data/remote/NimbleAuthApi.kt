@@ -9,7 +9,6 @@ import com.nimble.data.RegisterRequestDataModel
 import com.nimble.data.TokenResponse
 import retrofit2.Response
 import retrofit2.http.Body
-import retrofit2.http.Field
 import retrofit2.http.POST
 
 /**

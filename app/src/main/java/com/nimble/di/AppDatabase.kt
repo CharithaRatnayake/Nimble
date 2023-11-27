@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.sqlite.db.SupportSQLiteDatabase
 import com.nimble.base.AppConstants
 import com.nimble.data.local.SurveyDao
 import com.nimble.data.local.SurveyEntity
@@ -26,9 +25,11 @@ abstract class AppDatabase : RoomDatabase() {
 
         @Synchronized
         fun getInstance(ctx: Context): AppDatabase {
-            if(instance == null)
-                instance = Room.databaseBuilder(ctx.applicationContext, AppDatabase::class.java,
-                    AppConstants.APP_DATABASE_NAME)
+            if (instance == null)
+                instance = Room.databaseBuilder(
+                    ctx.applicationContext, AppDatabase::class.java,
+                    AppConstants.APP_DATABASE_NAME
+                )
                     .fallbackToDestructiveMigration()
                     .build()
 

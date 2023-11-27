@@ -5,7 +5,6 @@ import android.util.DisplayMetrics
 import android.view.WindowManager
 import android.widget.ImageView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
 import com.nimble.R
@@ -27,6 +26,7 @@ class Helper {
                     .into(it)
             }
         }
+
         fun loadImageView(context: Context, imageView: ImageView?, url: String) {
             imageView?.let {
                 Glide.with(context)
@@ -36,6 +36,7 @@ class Helper {
                     .into(it)
             }
         }
+
         fun getScreenWidth(context: Context): Int {
             val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
             val displayMetrics = DisplayMetrics()

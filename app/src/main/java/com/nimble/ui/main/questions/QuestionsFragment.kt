@@ -3,11 +3,7 @@ package com.nimble.ui.main.questions
 import android.os.Bundle
 import com.nimble.R
 import com.nimble.base.BaseFragment
-import com.nimble.data.SurveyAttributeDataModel
-import com.nimble.data.SurveyDataModel
 import com.nimble.databinding.FragmentQuestionsBinding
-import com.nimble.databinding.FragmentSurveyBinding
-import com.nimble.utils.Helper
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
