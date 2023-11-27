@@ -35,11 +35,32 @@
         <item name="android:background">@drawable/bg_button_default</item>
     </style>
 
+    <style name="TextViewHeader" parent="TextViewPara">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_margin">@dimen/margin_medium</item>
+        <item name="android:gravity">start</item>
+        <item name="android:textSize">@dimen/text_size_drawer_title</item>
+    </style>
+
     <style name="TextViewPara">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center</item>
         <item name="android:textSize">@dimen/text_size_para</item>
         <item name="android:textColor">@color/color_text_view</item>
+    </style>
+
+    <style name="ViewDivider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0.5dp</item>
+        <item name="android:background">@color/white</item>
+    </style>
+
+    <style name="ImageViewProfile">
+        <item name="android:layout_width">@dimen/profile_size</item>
+        <item name="android:layout_height">@dimen/profile_size</item>
+        <item name="android:layout_margin">@dimen/margin_medium</item>
+        <item name="android:contentDescription">@string/nav_header_desc</item>
+        <item name="android:src">@drawable/bg_circle_profile</item>
     </style>
 </resources>

@@ -8,6 +8,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.nimble.BuildConfig
 import com.nimble.base.AppConstants
+import com.nimble.data.local.UserPreferencesRepository
 import com.nimble.data.remote.NimbleAppApi
 import com.nimble.data.remote.NimbleAuthApi
 import dagger.Module
@@ -43,9 +44,20 @@ class AppModule {
     }
 
     @Provides
+    fun provideAuthTokenInterceptor(userPreferencesRepository: UserPreferencesRepository): AuthInterceptor {
+        return AuthInterceptor(userPreferencesRepository)
+    }
+
+    @Provides
+    fun providesAuthApi(retrofit: Retrofit): NimbleAuthApi {
+        return retrofit.create(NimbleAuthApi::class.java)
+    }
+
+    @Provides
     fun provideOkHttpClient(interceptor: HttpLoggingInterceptor): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(interceptor)
+            .addInterceptor(BearerTokenInterceptor("uFJoWJTNM_hq8llpOe9dhdwXK6CHzUwX6yGazrkmorY"))
             .build()
     }
 
@@ -61,11 +73,6 @@ class AppModule {
 
     @Provides
     fun provideGson(): Gson = GsonBuilder().create()
-
-    @Provides
-    fun providesAuthApi(retrofit: Retrofit): NimbleAuthApi {
-        return retrofit.create(NimbleAuthApi::class.java)
-    }
 
     @Provides
     fun providesAppApi(retrofit: Retrofit): NimbleAppApi {

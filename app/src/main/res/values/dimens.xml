@@ -4,10 +4,20 @@
     <dimen name="button_height">50dp</dimen>
 
     <dimen name="text_size_para">17sp</dimen>
+    <dimen name="text_size_title">28sp</dimen>
+    <dimen name="text_size_drawer_title">41sp</dimen>
 
     <dimen name="margin_high">32dp</dimen>
     <dimen name="margin_medium">16dp</dimen>
     <dimen name="margin_low">8dp</dimen>
     <dimen name="margin_very_low">4dp</dimen>
     <dimen name="radius_default">8dp</dimen>
+    <dimen name="nav_header_vertical_spacing">8dp</dimen>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="nav_header_height">176dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="profile_size">40dp</dimen>
+    <dimen name="fab_button_size">56dp</dimen>
+    <dimen name="default_elevation">4dp</dimen>
 </resources>

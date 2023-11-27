@@ -7,9 +7,6 @@ import com.nimble.data.ForgotPasswordResponseDataModel
 import com.nimble.data.LoginResponseDataModel
 import com.nimble.data.RegisterRequestDataModel
 import com.nimble.data.TokenResponse
-import com.nimble.data.UserDataModel
-import okhttp3.ResponseBody
-import org.json.JSONObject
 import retrofit2.Response
 import javax.inject.Inject
 

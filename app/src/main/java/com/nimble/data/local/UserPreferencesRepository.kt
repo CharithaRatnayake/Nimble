@@ -38,4 +38,12 @@ class UserPreferencesRepository @Inject constructor(
     val email: Flow<String?> = dataStore.data.map { preferences ->
         preferences[DATASTORE_KEY_EMAIL]
     }
+
+    val refreshToken: Flow<String?> = dataStore.data.map { preferences ->
+        preferences[DATASTORE_KEY_REFRESH_TOKEN]
+    }
+
+    val accessToken: Flow<String?> = dataStore.data.map { preferences ->
+        preferences[DATASTORE_KEY_ACCESS_TOKEN]
+    }
 }

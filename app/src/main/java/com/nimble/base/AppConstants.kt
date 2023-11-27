@@ -9,10 +9,19 @@ package com.nimble.base
 class AppConstants {
 
     companion object {
+
+        //API paths
         const val API_PATH_REGISTRATION = "registrations"
         const val API_PATH_AUTH_TOKEN = "oauth/token"
         const val API_PATH_LOGOUT = "oauth/revoke"
         const val API_PATH_FORGOT_PASSWORD = "passwords"
+        const val API_PATH_GET_USER_PROFILE = "me"
+        const val API_PATH_GET_SURVEYS_LIST = "surveys"
+
+        //API query
+        const val API_QUERY_PAGE_NUMBER = "page%5Bnumber%5D"
+        const val API_QUERY_PAGE_SIZE = "page%5Bsize%5D"
+
         const val REQUEST_BODY_GRANT_TYPE_PASSWORD = "password"
         const val REQUEST_BODY_GRANT_TYPE_REFRESH_TOKEN = "refresh_token"
 

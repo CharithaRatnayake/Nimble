@@ -16,10 +16,6 @@
         android:theme="@style/Theme.Nimble"
         tools:targetApi="31">
         <activity
-            android:name=".ui.auth.AuthActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ui.splash.SplashActivity"
             android:exported="true"
             android:screenOrientation="portrait"
@@ -33,7 +29,21 @@
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/MainTheme" />
+        <activity
+            android:name=".ui.main.survey.SurveyActivity"
+            android:screenOrientation="portrait"
+            android:exported="false" />
+        <activity
+            android:name=".ui.main.SliderActivity"
+            android:exported="false"
+            android:label="@string/title_activity_slider"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Nimble.NoActionBar" />
+        <activity
+            android:name=".ui.auth.AuthActivity"
+            android:exported="false"
             android:screenOrientation="portrait" />
     </application>
-
 </manifest>

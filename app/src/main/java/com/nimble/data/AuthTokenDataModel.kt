@@ -11,8 +11,9 @@ import com.nimble.BuildConfig
  */
 data class AuthTokenDataModel(
     @SerializedName("grant_type") var grantType: String = GrantType.PASSWORD.value,
-    @SerializedName("email") var email: String,
-    @SerializedName("password") var password: String,
+    @SerializedName("refresh_token") var refresh_token: String = "",
+    @SerializedName("email") var email: String = "",
+    @SerializedName("password") var password: String = "",
     @SerializedName("client_id") var clientId: String = BuildConfig.CLIENT_ID,
     @SerializedName("client_secret") var clientSecret: String = BuildConfig.CLIENT_SECRET
 )

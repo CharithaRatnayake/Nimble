@@ -11,6 +11,7 @@ import com.google.gson.annotations.SerializedName
 data class UserDataModel(
     @SerializedName("email") var email: String = "",
     @SerializedName("name") var name: String = "",
+    @SerializedName("avatar_url") var avatarUrl: String = "",
     @SerializedName("password") var password: String = "",
     @SerializedName("password_confirmation") var passwordConfirmation: String = ""
 )
