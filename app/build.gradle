@@ -2,7 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
-//    id 'dagger.hilt.android.plugin'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -22,10 +22,29 @@ android {
         }
     }
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    flavorDimensions "product"
+    productFlavors {
+        staging {
+            // Define properties specific to the free flavor
+            buildConfigField("String", "BASE_URL", "\"https://survey-api-staging.nimblehq.co/api/v1\"")
+        }
+        production {
+            // Define properties specific to the paid flavor
+            buildConfigField("String", "BASE_URL", "\"https://survey-api.nimblehq.co/api/v1\"")
+        }
+        mock {
+            // Define properties specific to the paid flavor
+            buildConfigField("String", "BASE_URL", "\"https://nimble-survey-web-mock.fly.dev\"")
         }
     }
     compileOptions {
@@ -58,11 +77,11 @@ dependencies {
     implementation "com.squareup.retrofit2:adapter-rxjava:2.9.0"
 
     //hilt
-    kapt 'com.google.dagger:hilt-compiler:2.42'
+    kapt 'com.google.dagger:hilt-compiler:2.44'
     kapt 'com.google.dagger:dagger-android-processor:2.42'
-    implementation 'com.google.dagger:hilt-android-compiler:2.42'
-    implementation 'com.google.dagger:hilt-android:2.42'
-    kapt 'androidx.hilt:hilt-compiler:1.0.0'
+    implementation 'com.google.dagger:hilt-android-compiler:2.48.1'
+    implementation 'com.google.dagger:hilt-android:2.48.1'
+    kapt 'androidx.hilt:hilt-compiler:1.1.0'
 
     //coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2'
