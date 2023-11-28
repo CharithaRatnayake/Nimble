@@ -14,7 +14,10 @@
     <string name="error_valid_name">Please enter valid name.</string>
     <string name="error_valid_email">Please enter valid email address.</string>
     <string name="error_valid_password">Password length should be minimum 6. Please enter valid password.</string>
-    <string name="error_valid_password_retype">Passwords do not match. Please re-type the passwords.\n</string>
+    <string name="error_valid_password_retype">Passwords do not match. Please re-type the passwords.</string>
+    <string name="error_unable_to_connect">Unable to connect to the internet.</string>
+    <string name="error_server_not_found">We couldn\'t find the server.</string>
+    <string name="error_unknown_error">Unknown error.</string>
     <string name="enter_your_email_to_receive_instructions_for_resetting_your_password">Enter your email to receive instructions for resetting your password.</string>
     <string name="title_activity_slider">SliderActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>

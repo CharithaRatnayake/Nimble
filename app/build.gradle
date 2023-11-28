@@ -38,21 +38,15 @@ android {
     productFlavors {
         staging {
             // Define properties specific to the free flavor
-            buildConfigField("String", "BASE_URL", "\"https://survey-api-staging.nimblehq.co/api/v1/\"")
-            buildConfigField("String", "CLIENT_ID", "\"6GbE8dhoz519l2N_F99StqoOs6Tcmm1rXgda4q__rIw\"")
-            buildConfigField("String", "CLIENT_SECRET", "\"_ayfIm7BeUAhx2W1OUqi20fwO3uNxfo1QstyKlFCgHw\"")
+            buildConfigField("String", "BASE_URL", "\"https://survey-api-staging.nimblehq.co/api/v12/\"")
         }
         production {
             // Define properties specific to the paid flavor
             buildConfigField("String", "BASE_URL", "\"https://survey-api.nimblehq.co/api/v1/\"")
-            buildConfigField("String", "CLIENT_ID", "\"6GbE8dhoz519l2N_F99StqoOs6Tcmm1rXgda4q__rIw\"")
-            buildConfigField("String", "CLIENT_SECRET", "\"_ayfIm7BeUAhx2W1OUqi20fwO3uNxfo1QstyKlFCgHw\"")
         }
         mock {
             // Define properties specific to the paid flavor
-            buildConfigField("String", "BASE_URL", "\"https://nimble-survey-web-mock.fly.dev/\"")
-            buildConfigField("String", "CLIENT_ID", "\"6GbE8dhoz519l2N_F99StqoOs6Tcmm1rXgda4q__rIw\"")
-            buildConfigField("String", "CLIENT_SECRET", "\"_ayfIm7BeUAhx2W1OUqi20fwO3uNxfo1QstyKlFCgHw\"")
+            buildConfigField("String", "BASE_URL", "\"https://nimble-survey-web-mock.fly.dev2/\"")
         }
     }
     compileOptions {

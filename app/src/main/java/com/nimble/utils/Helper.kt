@@ -1,6 +1,7 @@
 package com.nimble.utils
 
 import android.content.Context
+import android.net.ConnectivityManager
 import android.util.DisplayMetrics
 import android.view.WindowManager
 import android.widget.ImageView
@@ -8,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
 import com.nimble.R
+
 
 /**
  * @file Helper
@@ -35,13 +37,6 @@ class Helper {
                     .placeholder(R.drawable.background_gradient_survey) // Replace with your placeholder image
                     .into(it)
             }
-        }
-
-        fun getScreenWidth(context: Context): Int {
-            val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-            val displayMetrics = DisplayMetrics()
-            windowManager.defaultDisplay.getMetrics(displayMetrics)
-            return displayMetrics.widthPixels
         }
     }
 }

@@ -6,7 +6,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.nimble.R
 import com.nimble.base.BaseFragment
 import com.nimble.data.MetaDataModel
-import com.nimble.data.Resource
+import com.nimble.data.Resource1
 import com.nimble.data.SurveyAttributeDataModel
 import com.nimble.data.SurveyDataModel
 import com.nimble.data.UserDataModel
@@ -80,29 +80,29 @@ class SurveysListFragment :
         viewModel = ViewModelProvider(this)[SurveysViewModel::class.java]
         viewModel.userProfileResponse.observe(this) { data ->
             when (data.status) {
-                Resource.Status.LOADING -> {
+                Resource1.Status.LOADING -> {
                 }
 
-                Resource.Status.SUCCESS -> {
+                Resource1.Status.SUCCESS -> {
                     data.data?.let { loadProfileData(it) }
                 }
 
-                Resource.Status.ERROR -> {
+                Resource1.Status.ERROR -> {
                 }
             }
         }
         viewModel.surveyListCache.observe(this) { data ->
             when (data.status) {
-                Resource.Status.LOADING -> {
+                Resource1.Status.LOADING -> {
                     showWaiting()
                 }
 
-                Resource.Status.SUCCESS -> {
+                Resource1.Status.SUCCESS -> {
                     dismissWaiting()
                     loadCacheData(data.data)
                 }
 
-                Resource.Status.ERROR -> {
+                Resource1.Status.ERROR -> {
                     dismissWaiting()
                     viewModel.getSurveys(INITIAL_PAGE, SURVEYS_PAGE_SIZE)
                 }

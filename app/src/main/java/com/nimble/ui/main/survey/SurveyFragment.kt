@@ -6,6 +6,7 @@ import com.nimble.base.BaseFragment
 import com.nimble.data.SurveyAttributeDataModel
 import com.nimble.data.SurveyDataModel
 import com.nimble.databinding.FragmentSurveyBinding
+import com.nimble.ui.auth.AuthActivity
 import com.nimble.utils.Helper
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -38,6 +39,9 @@ class SurveyFragment :
             dataModel?.let {
                 getCurrentActivity<SurveyActivity>()?.startQuestionsFragment(it.id)
             }
+        }
+        binding.backButton.setOnClickListener {
+            getCurrentActivity<SurveyActivity>()?.onBackPressed()
         }
         dataModel?.let { loadSurveyData(it.attributes) }
     }

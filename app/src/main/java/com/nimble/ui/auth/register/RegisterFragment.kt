@@ -3,8 +3,10 @@ package com.nimble.ui.auth.register
 import androidx.lifecycle.ViewModelProvider
 import com.nimble.R
 import com.nimble.base.BaseFragment
-import com.nimble.data.Resource
+import com.nimble.data.Resource1
+import com.nimble.data.http.Resource
 import com.nimble.databinding.FragmentRegisterBinding
+import com.nimble.ui.auth.AuthActivity
 import com.nimble.ui.auth.AuthViewModel
 import com.nimble.utils.ValidatorUtil
 import dagger.hilt.android.AndroidEntryPoint
@@ -56,32 +58,28 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(R.layout.fragment
         }
 
         viewModel.register(
-            name, email, password, rePassword
+            name, email, password
         )
     }
 
     override fun initViewModel() {
         viewModel = ViewModelProvider(this)[AuthViewModel::class.java]
         viewModel.authLoginResponse.observe(viewLifecycleOwner) { data ->
-            when (data.status) {
-                Resource.Status.LOADING -> {
+            when (data) {
+                is Resource.Loading -> {
                     showWaiting()
                 }
 
-
-
-                Resource.Status.SUCCESS -> {
+                is Resource.Success -> {
                     dismissWaiting()
 
-                    showSuccess("Success")
+                    getCurrentActivity<AuthActivity>()?.startMainActivity()
                 }
 
-                Resource.Status.ERROR -> {
+                is Resource.Failure -> {
                     dismissWaiting()
 
-                    data.data?.let {
-                        it.errors?.firstOrNull()?.detail?.let { showError(it) }
-                    }
+                    showError(data)
                 }
             }
         }

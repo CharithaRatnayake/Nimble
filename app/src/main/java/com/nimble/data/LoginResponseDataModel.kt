@@ -1,6 +1,7 @@
 package com.nimble.data
 
 import com.google.gson.annotations.SerializedName
+import com.nimble.data.http.ErrorBody
 
 /**
  * @file LoginResponseDataModel
@@ -10,5 +11,5 @@ import com.google.gson.annotations.SerializedName
  */
 data class LoginResponseDataModel(
     @SerializedName("data") var data: TokenResponse = TokenResponse(),
-    @SerializedName("errors") var errors: ArrayList<AppErrorDataModel>? = arrayListOf()
+    @SerializedName("errors") var errors: ArrayList<ErrorBody>? = arrayListOf()
 )

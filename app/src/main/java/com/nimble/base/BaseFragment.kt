@@ -24,8 +24,13 @@ import com.akndmr.library.SizeUnit
 import com.akndmr.library.TextAttribute
 import com.akndmr.library.Type
 import com.google.android.material.snackbar.Snackbar
+import com.google.gson.Gson
 import com.nimble.R
+import com.nimble.data.http.AppError
+import com.nimble.data.http.Resource
 import com.nimble.ui.common.ProgressDialog
+import okhttp3.ResponseBody
+import org.json.JSONObject
 
 
 /**
@@ -102,6 +107,27 @@ abstract class BaseFragment<T : ViewDataBinding>(
             )
         )
         snackbar.show()
+    }
+
+    fun showError(data: Resource.Failure) {
+        val message = when {
+            data.isNetworkError -> getString(R.string.error_unable_to_connect)
+            data.errorCode == 404 -> getString(R.string.error_server_not_found)
+            data.errorBody != null -> {
+                val errors = data.errorBody.getErrorObject<AppError>().errors
+                if (errors?.isNotEmpty() == true) errors[0].detail
+                else getString(R.string.error_unknown_error)
+            }
+            else -> getString(R.string.error_unknown_error)
+        }
+
+        showError(message)
+    }
+
+    private inline fun <reified T> ResponseBody.getErrorObject(): T {
+        val gson = Gson()
+        val jsonObject = JSONObject(charStream().readText())
+        return gson.fromJson(jsonObject.toString(), T::class.java)
     }
 
     fun showSuccess(message: String) {

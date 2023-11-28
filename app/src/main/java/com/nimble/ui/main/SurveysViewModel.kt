@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nimble.data.Resource
+import com.nimble.data.Resource1
 import com.nimble.data.SurveyAttributeDataModel
 import com.nimble.data.UserDataModel
 import com.nimble.data.local.SurveyEntity
@@ -21,13 +21,13 @@ class SurveysViewModel @Inject constructor(
     private val localAppRepository: LocalAppRepository
 ) : ViewModel() {
 
-    private val _userProfileResponse = MutableLiveData<Resource<UserDataModel>>()
+    private val _userProfileResponse = MutableLiveData<Resource1<UserDataModel>>()
 
-    val userProfileResponse: LiveData<Resource<UserDataModel>> = _userProfileResponse
+    val userProfileResponse: LiveData<Resource1<UserDataModel>> = _userProfileResponse
 
-    private val _surveyListCache = MutableLiveData<Resource<List<SurveyEntity>>>()
+    private val _surveyListCache = MutableLiveData<Resource1<List<SurveyEntity>>>()
 
-    val surveyListCache: LiveData<Resource<List<SurveyEntity>>> = _surveyListCache
+    val surveyListCache: LiveData<Resource1<List<SurveyEntity>>> = _surveyListCache
 
     fun getUserProfile() {
         Log.d(javaClass.simpleName, "getUserProfile")
@@ -38,8 +38,8 @@ class SurveysViewModel @Inject constructor(
             if (response.isSuccessful) {
                 val body = response.body()
                 _userProfileResponse.value =
-                    Resource(
-                        Resource.Status.SUCCESS,
+                    Resource1(
+                        Resource1.Status.SUCCESS,
                         body?.userDataModel?.attributes,
                         response.message()
                     )
@@ -77,23 +77,23 @@ class SurveysViewModel @Inject constructor(
             localAppRepository.insertSurveys(surveyEntityList)
 
             _surveyListCache.value =
-                Resource(Resource.Status.SUCCESS, surveyEntityList, "")
+                Resource1(Resource1.Status.SUCCESS, surveyEntityList, "")
         }
     }
 
     fun getCacheSurveys() {
         Log.d(javaClass.simpleName, "getCacheSurveys")
 
-        _surveyListCache.value = Resource.loading()
+        _surveyListCache.value = Resource1.loading()
         viewModelScope.launch {
             val surveysList = localAppRepository.getAllSurveys()
 
             if (surveysList.isEmpty()) {
                 _surveyListCache.value =
-                    Resource(Resource.Status.ERROR, surveysList, "")
+                    Resource1(Resource1.Status.ERROR, surveysList, "")
             } else {
                 _surveyListCache.value =
-                    Resource(Resource.Status.SUCCESS, surveysList, "")
+                    Resource1(Resource1.Status.SUCCESS, surveysList, "")
             }
         }
     }

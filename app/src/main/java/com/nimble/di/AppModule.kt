@@ -22,6 +22,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 /**
@@ -53,6 +54,9 @@ class AppModule {
         userPreferencesRepository: UserPreferencesRepository
     ): OkHttpClient {
         return OkHttpClient.Builder()
+            .connectTimeout(AppConstants.HTTP_CONNECT_TIMEOUT, TimeUnit.SECONDS) // Timeout for establishing a connection
+            .readTimeout(AppConstants.HTTP_READ_TIMEOUT, TimeUnit.SECONDS)    // Timeout for reading data
+            .writeTimeout(AppConstants.HTTP_WRITE_TIMEOUT, TimeUnit.SECONDS)   // Timeout for writing data
             .addInterceptor(interceptor)
             .addInterceptor(AuthInterceptor(userPreferencesRepository))
             .build()
@@ -109,5 +113,4 @@ class AppModule {
     //GSON for json converter class
     @Provides
     fun provideGson(): Gson = GsonBuilder().create()
-
 }

@@ -48,6 +48,7 @@ class SliderActivity : BaseActivity<ActivitySliderBinding>(R.layout.activity_sli
 
         viewModel = ViewModelProvider(this)[AuthViewModel::class.java]
         viewModel.authLogoutResponse.observe(this) { isLogout ->
+            dismissWaiting()
             if (isLogout) {
                 val intent = Intent(this, AuthActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -60,6 +61,7 @@ class SliderActivity : BaseActivity<ActivitySliderBinding>(R.layout.activity_sli
 
     private fun logout() {
         viewModel.logout()
+        showWaiting()
     }
 
     fun loadProfileData(data: UserDataModel) {

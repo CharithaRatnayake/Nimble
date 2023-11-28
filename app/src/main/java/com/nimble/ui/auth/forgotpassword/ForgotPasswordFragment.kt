@@ -1,14 +1,18 @@
 package com.nimble.ui.auth.forgotpassword
 
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.nimble.R
 import com.nimble.base.BaseFragment
-import com.nimble.data.Resource
+import com.nimble.data.Resource1
+import com.nimble.data.http.Resource
 import com.nimble.databinding.FragmentForgotPasswordBinding
 import com.nimble.ui.auth.AuthActivity
 import com.nimble.ui.auth.AuthViewModel
 import com.nimble.utils.ValidatorUtil
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 /**
  * @file ForgotPasswordFragment
@@ -21,6 +25,7 @@ class ForgotPasswordFragment :
     BaseFragment<FragmentForgotPasswordBinding>(R.layout.fragment_forgot_password) {
 
     companion object {
+        const val SUCCESS_POPUP_DELAY = 2000L
         fun newInstance() = ForgotPasswordFragment()
     }
 
@@ -30,27 +35,33 @@ class ForgotPasswordFragment :
         binding.btnReset.setOnClickListener {
             reset()
         }
+        binding.backButton.setOnClickListener {
+            getCurrentActivity<AuthActivity>()?.onBackPressed()
+        }
     }
 
     override fun initViewModel() {
         viewModel = ViewModelProvider(this)[AuthViewModel::class.java]
         viewModel.authResetResponse.observe(viewLifecycleOwner) { data ->
-            when (data.status) {
-                Resource.Status.LOADING -> {
+            when (data) {
+                is Resource.Loading -> {
                     showWaiting()
                 }
 
-                Resource.Status.SUCCESS -> {
+                is Resource.Success -> {
                     dismissWaiting()
 
-                    val message = data.data?.meta?.message
-                    message?.let { showSuccess(it) }
-
-                    getCurrentActivity<AuthActivity>()?.onBackPressed()
+                    lifecycleScope.launch {
+                        showSuccess(data.value.meta.message)
+                        delay(SUCCESS_POPUP_DELAY)
+                        getCurrentActivity<AuthActivity>()?.onBackPressed()
+                    }
                 }
 
-                Resource.Status.ERROR -> {
+                is Resource.Failure -> {
                     dismissWaiting()
+
+                    showError(data)
                 }
             }
         }
