@@ -1,6 +1,7 @@
 package com.nimble.ui.main.surveys
 
 import android.util.Log
+import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.nimble.R
@@ -35,7 +36,9 @@ class SurveysListFragment :
 
     override fun initUI() {
 
+        binding.progressView.startAnimation()
         adapter = SurveyPagerAdapter(this@SurveysListFragment)
+        binding.date.text = Helper.getCurrentDateAndTime()
         binding.profile.setOnClickListener {
             getCurrentActivity<SliderActivity>()?.openDrawer()
         }
@@ -43,6 +46,9 @@ class SurveysListFragment :
             val currentPosition = binding.pager.currentItem
             getCurrentActivity<SliderActivity>()?.startSurveyInfoActivity(surveyList[currentPosition])
 
+        }
+        binding.progressView.onClickRetryListener = {
+            viewModel.getSurveys(INITIAL_PAGE, SURVEYS_PAGE_SIZE)
         }
         binding.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
@@ -88,8 +94,6 @@ class SurveysListFragment :
                 }
 
                 is Resource.Failure -> {
-                    dismissWaiting()
-
                     showError(data)
                 }
             }
@@ -114,7 +118,7 @@ class SurveysListFragment :
 
                 is Resource.Failure -> {
                     dismissWaiting()
-                    showError(data)
+                    binding.progressView.setError(data)
                 }
             }
         }
@@ -156,5 +160,6 @@ class SurveysListFragment :
         }
         adapter.notifyDataSetChanged()
         binding.indicator.setViewPager(binding.pager)
+        binding.progressView.stopAnimation()
     }
 }

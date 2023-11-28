@@ -65,12 +65,6 @@ abstract class BaseActivity<T : ViewDataBinding>(
         tag: String? = null
     ) {
         supportFragmentManager.beginTransaction().apply {
-            setCustomAnimations(
-                android.R.anim.slide_in_left,  // Enter animation
-                android.R.anim.slide_out_right,  // Exit animation
-                android.R.anim.slide_in_left,  // Pop enter animation
-                android.R.anim.slide_out_right  // Pop exit animation
-            )
 
             replace(containerId, fragment, tag)
 

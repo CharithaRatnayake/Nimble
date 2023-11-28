@@ -3,8 +3,5 @@
     <item>
         <bitmap android:src="@mipmap/ic_background" />
     </item>
-    <item
-        android:gravity="center"
-        android:drawable="@drawable/ic_logo"/>
     <item android:drawable="@drawable/background_gradient"/>
 </layer-list>

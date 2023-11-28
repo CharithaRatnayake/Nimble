@@ -1,14 +1,14 @@
 package com.nimble.utils
 
 import android.content.Context
-import android.net.ConnectivityManager
-import android.util.DisplayMetrics
-import android.view.WindowManager
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
 import com.nimble.R
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 
 /**
@@ -37,6 +37,16 @@ class Helper {
                     .placeholder(R.drawable.background_gradient_survey) // Replace with your placeholder image
                     .into(it)
             }
+        }
+
+        fun getCurrentDateAndTime(): String {
+            // Get the current date and time
+            val currentDate = Date()
+
+            // Define the desired date format
+            val dateFormat = SimpleDateFormat("EEEE, MMMM dd", Locale.getDefault())
+
+            return dateFormat.format(currentDate)
         }
     }
 }

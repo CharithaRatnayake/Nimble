@@ -1,15 +1,17 @@
 package com.nimble.ui.auth.login
 
+import android.animation.AnimatorInflater
+import android.animation.AnimatorSet
 import androidx.lifecycle.ViewModelProvider
 import com.nimble.R
 import com.nimble.base.BaseFragment
-import com.nimble.data.Resource1
 import com.nimble.data.http.Resource
 import com.nimble.databinding.FragmentLoginBinding
 import com.nimble.ui.auth.AuthActivity
 import com.nimble.ui.auth.AuthViewModel
 import com.nimble.utils.ValidatorUtil
 import dagger.hilt.android.AndroidEntryPoint
+
 
 /**
  * @file LoginFragment
@@ -27,6 +29,15 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
     private lateinit var viewModel: AuthViewModel
 
     override fun initUI() {
+        val slideInFromCenter =
+            AnimatorInflater.loadAnimator(binding.logo.context, R.animator.slide_in_from_center) as AnimatorSet
+
+        // Apply the animation to the ImageView
+
+        // Apply the animation to the ImageView
+        slideInFromCenter.setTarget(binding.logo)
+        slideInFromCenter.start()
+
         binding.btnLogIn.setOnClickListener {
             login()
         }
