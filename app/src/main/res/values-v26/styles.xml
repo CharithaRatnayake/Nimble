@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="EditTextEmail" parent="EditText">
+        <item name="android:inputType">textEmailAddress</item>
+        <item name="android:autofillHints">emailAddress</item>
+    </style>
+
+    <style name="EditTextPassword" parent="EditText">
+        <item name="android:inputType">textPassword</item>
+        <item name="android:autofillHints">textPassword</item>
+    </style>
+</resources>

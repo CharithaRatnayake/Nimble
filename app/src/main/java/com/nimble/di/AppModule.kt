@@ -1,14 +1,22 @@
 package com.nimble.di
 
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.nimble.BuildConfig
+import com.nimble.base.AppConstants
 import com.nimble.data.remote.NimbleAppApi
 import com.nimble.data.remote.NimbleAuthApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -23,10 +31,30 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class AppModule {
 
+    private val Context.userDataStore: DataStore<Preferences> by preferencesDataStore(
+        name = AppConstants.APP_DATASTORE_NAME
+    )
+
+    @Provides
+    fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
+        val interceptor = HttpLoggingInterceptor()
+        interceptor.level = HttpLoggingInterceptor.Level.BODY
+        return interceptor
+    }
+
+    @Provides
+    fun provideOkHttpClient(interceptor: HttpLoggingInterceptor): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor(interceptor)
+            .build()
+    }
+
     @Singleton
     @Provides
-    fun providesRetrofit(): Retrofit {
-        return Retrofit.Builder().baseUrl(BuildConfig.BASE_URL)
+    fun provideRetrofit(client: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(BuildConfig.BASE_URL)
+            .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
@@ -42,6 +70,14 @@ class AppModule {
     @Provides
     fun providesAppApi(retrofit: Retrofit): NimbleAppApi {
         return retrofit.create(NimbleAppApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserDataStorePreferences(
+        @ApplicationContext applicationContext: Context
+    ): DataStore<Preferences> {
+        return applicationContext.userDataStore
     }
 
 }
