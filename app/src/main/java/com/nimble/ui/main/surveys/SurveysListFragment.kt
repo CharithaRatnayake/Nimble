@@ -1,7 +1,6 @@
 package com.nimble.ui.main.surveys
 
 import android.util.Log
-import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.nimble.R
@@ -49,6 +48,14 @@ class SurveysListFragment :
         }
         binding.progressView.onClickRetryListener = {
             viewModel.getSurveys(INITIAL_PAGE, SURVEYS_PAGE_SIZE)
+        }
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            binding.progressView.startAnimation()
+            viewModel.getRefreshSurveys(INITIAL_PAGE, SURVEYS_PAGE_SIZE)
+
+            surveyList.clear()
+            adapter = SurveyPagerAdapter(this@SurveysListFragment)
+            binding.pager.adapter = adapter
         }
         binding.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
@@ -157,9 +164,10 @@ class SurveysListFragment :
         dataModel.forEach {
             val fragment = SurveyInfoFragment.newInstance(it.attributes)
             adapter.addFragment(fragment)
+            adapter.notifyDataSetChanged()
+            binding.indicator.setViewPager(binding.pager)
+            binding.progressView.stopAnimation()
+            binding.swipeRefreshLayout.isRefreshing = false
         }
-        adapter.notifyDataSetChanged()
-        binding.indicator.setViewPager(binding.pager)
-        binding.progressView.stopAnimation()
     }
 }

@@ -57,6 +57,14 @@ class SurveysViewModel @Inject constructor(
         }
     }
 
+    fun getRefreshSurveys(initialPage: Int, surveysPageSize: Int) {
+        viewModelScope.launch {
+            localAppRepository.deleteAllSurveys()
+
+            getSurveys(initialPage, surveysPageSize)
+        }
+    }
+
     fun getSurveys(page: Int, pageSize: Int) {
         Log.d(javaClass.simpleName, "getSurveys + [Page: $page] [Page Size: $pageSize]")
 
