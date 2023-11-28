@@ -5,9 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nimble.data.Resource1
 import com.nimble.data.SurveyAttributeDataModel
-import com.nimble.data.UserDataModel
+import com.nimble.data.SurveyListResponseDataModel
+import com.nimble.data.UserResponseDataModel
+import com.nimble.data.http.Resource
 import com.nimble.data.local.SurveyEntity
 import com.nimble.di.repository.LocalAppRepository
 import com.nimble.di.repository.RemoteAppRepository
@@ -21,13 +22,17 @@ class SurveysViewModel @Inject constructor(
     private val localAppRepository: LocalAppRepository
 ) : ViewModel() {
 
-    private val _userProfileResponse = MutableLiveData<Resource1<UserDataModel>>()
+    private val _userProfileResponse = MutableLiveData<Resource<UserResponseDataModel>>()
 
-    val userProfileResponse: LiveData<Resource1<UserDataModel>> = _userProfileResponse
+    val userProfileResponse: LiveData<Resource<UserResponseDataModel>> = _userProfileResponse
 
-    private val _surveyListCache = MutableLiveData<Resource1<List<SurveyEntity>>>()
+    private val _surveyListResponse = MutableLiveData<Resource<SurveyListResponseDataModel>>()
 
-    val surveyListCache: LiveData<Resource1<List<SurveyEntity>>> = _surveyListCache
+    val surveyListResponse: LiveData<Resource<SurveyListResponseDataModel>> = _surveyListResponse
+
+    private val _surveyListCache = MutableLiveData<List<SurveyEntity>>()
+
+    val surveyListCache: LiveData<List<SurveyEntity>> = _surveyListCache
 
     fun getUserProfile() {
         Log.d(javaClass.simpleName, "getUserProfile")
@@ -35,14 +40,19 @@ class SurveysViewModel @Inject constructor(
         viewModelScope.launch {
             val response = appRepository.getUserProfile()
 
-            if (response.isSuccessful) {
-                val body = response.body()
-                _userProfileResponse.value =
-                    Resource1(
-                        Resource1.Status.SUCCESS,
-                        body?.userDataModel?.attributes,
-                        response.message()
-                    )
+            response.let { data ->
+                when (data) {
+                    is Resource.Success -> {
+                        Log.d(javaClass.simpleName, "SUCCESS --> getUserProfile: $data")
+                        _userProfileResponse.value = data
+                    }
+
+                    is Resource.Failure -> {
+                        _userProfileResponse.value = data
+                    }
+
+                    else -> {}
+                }
             }
         }
     }
@@ -53,10 +63,19 @@ class SurveysViewModel @Inject constructor(
         viewModelScope.launch {
             val response = appRepository.getSurveys(page, pageSize)
 
-            if (response.isSuccessful) {
-                val body = response.body()
+            response.let { data ->
+                when (data) {
+                    is Resource.Success -> {
+                        Log.d(javaClass.simpleName, "SUCCESS --> getSurveys: $data")
+                        setSurveysToCache(data.value.data)
+                    }
 
-                body?.let { setSurveysToCache(it.data) }
+                    is Resource.Failure -> {
+                        _surveyListResponse.value = data
+                    }
+
+                    else -> {}
+                }
             }
         }
     }
@@ -76,25 +95,17 @@ class SurveysViewModel @Inject constructor(
         viewModelScope.launch {
             localAppRepository.insertSurveys(surveyEntityList)
 
-            _surveyListCache.value =
-                Resource1(Resource1.Status.SUCCESS, surveyEntityList, "")
+            _surveyListCache.value = surveyEntityList
         }
     }
 
     fun getCacheSurveys() {
         Log.d(javaClass.simpleName, "getCacheSurveys")
 
-        _surveyListCache.value = Resource1.loading()
         viewModelScope.launch {
             val surveysList = localAppRepository.getAllSurveys()
 
-            if (surveysList.isEmpty()) {
-                _surveyListCache.value =
-                    Resource1(Resource1.Status.ERROR, surveysList, "")
-            } else {
-                _surveyListCache.value =
-                    Resource1(Resource1.Status.SUCCESS, surveysList, "")
-            }
+            _surveyListCache.value = surveysList
         }
     }
 

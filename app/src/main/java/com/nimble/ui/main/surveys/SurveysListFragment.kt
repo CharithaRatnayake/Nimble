@@ -6,10 +6,10 @@ import androidx.viewpager2.widget.ViewPager2
 import com.nimble.R
 import com.nimble.base.BaseFragment
 import com.nimble.data.MetaDataModel
-import com.nimble.data.Resource1
 import com.nimble.data.SurveyAttributeDataModel
 import com.nimble.data.SurveyDataModel
 import com.nimble.data.UserDataModel
+import com.nimble.data.http.Resource
 import com.nimble.data.local.SurveyEntity
 import com.nimble.databinding.FragmentSurveysListBinding
 import com.nimble.ui.main.SliderActivity
@@ -79,35 +79,46 @@ class SurveysListFragment :
     override fun initViewModel() {
         viewModel = ViewModelProvider(this)[SurveysViewModel::class.java]
         viewModel.userProfileResponse.observe(this) { data ->
-            when (data.status) {
-                Resource1.Status.LOADING -> {
+            when (data) {
+                is Resource.Loading -> {
                 }
 
-                Resource1.Status.SUCCESS -> {
-                    data.data?.let { loadProfileData(it) }
+                is Resource.Success -> {
+                    loadProfileData(data.value.userDataModel.attributes)
                 }
 
-                Resource1.Status.ERROR -> {
+                is Resource.Failure -> {
+                    dismissWaiting()
+
+                    showError(data)
                 }
             }
         }
         viewModel.surveyListCache.observe(this) { data ->
-            when (data.status) {
-                Resource1.Status.LOADING -> {
+
+            if (data.isEmpty()) {
+                viewModel.getSurveys(INITIAL_PAGE, SURVEYS_PAGE_SIZE)
+            } else {
+                loadCacheData(data)
+            }
+        }
+        viewModel.surveyListResponse.observe(this) { data ->
+            when (data) {
+                is Resource.Loading -> {
                     showWaiting()
                 }
 
-                Resource1.Status.SUCCESS -> {
+                is Resource.Success -> {
                     dismissWaiting()
-                    loadCacheData(data.data)
                 }
 
-                Resource1.Status.ERROR -> {
+                is Resource.Failure -> {
                     dismissWaiting()
-                    viewModel.getSurveys(INITIAL_PAGE, SURVEYS_PAGE_SIZE)
+                    showError(data)
                 }
             }
         }
+
         viewModel.getCacheSurveys()
         viewModel.getUserProfile()
     }
