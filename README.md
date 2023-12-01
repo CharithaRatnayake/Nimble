@@ -31,7 +31,9 @@ Implement a mechanism to automatically refresh access tokens using the OAuth API
  
 | Release version  | Version Code | Url |
 | ------------- | ------------- | ------------- |
-| ```1.0.0```  | ```1```  | [https://github.com/CharithaRatnayake/Nimble](https://github.com/CharithaRatnayake/Nimble/releases/tag/REL_1.0.0) |
+| ```1.0.0```  | ```1```  | [REL_1.0.0](https://github.com/CharithaRatnayake/Nimble/releases/tag/REL_1.0.0) |
+| ```1.0.1```  | ```2```  | Not released |
+| ```1.0.2```  | ```3```  | [REL_1.0.3](https://github.com/CharithaRatnayake/Nimble/releases/tag/REL_1.0.3) |
 
 <br><br>
 
