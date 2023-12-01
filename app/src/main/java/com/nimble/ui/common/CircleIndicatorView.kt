@@ -90,7 +90,7 @@ class CircleIndicatorView @JvmOverloads constructor(
      *
      * @param circleDrawable The drawable representing the circle to be added.
      */
-    private fun addCircleView(circleDrawable: Drawable) {
+    fun addCircleView(circleDrawable: Drawable) {
         val circleImageView = ImageView(context)
         circleImageView.setImageDrawable(circleDrawable)
 

@@ -1,6 +1,8 @@
 package com.nimble
 
 import com.nimble.utils.ValidatorUtil
+import com.nimble.utils.stringToBase64
+import android.util.Base64
 import org.junit.Assert.*
 import org.junit.Test
 

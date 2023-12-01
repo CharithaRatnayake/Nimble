@@ -6,7 +6,6 @@ import com.nimble.base.BaseActivity
 import com.nimble.data.SurveyAttributeDataModel
 import com.nimble.databinding.ActivitySurveyBinding
 import com.nimble.ui.main.questions.QuestionsFragment
-import com.nimble.ui.main.surveys.SurveysListFragment
 import com.nimble.utils.startFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -15,8 +14,6 @@ class SurveyActivity : BaseActivity<ActivitySurveyBinding>(R.layout.activity_sur
 
     companion object {
         const val KEY_DATA = "com.nimble.ui.main.survey.KEY_DATA"
-
-        fun newInstance() = SurveysListFragment()
     }
 
     override fun initialize() {
