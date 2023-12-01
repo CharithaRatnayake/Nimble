@@ -30,6 +30,9 @@ Implement a mechanism to automatically refresh access tokens using the OAuth API
 ## Build Instructions
 You need to clone the project and open it with the Android Studio IDE(), then build the project and select the build variants as 'production'
 
+![image](https://github.com/CharithaRatnayake/Nimble/assets/23307834/74a6e498-4547-4900-8082-3422b296ce5f)
+
+
 <br><br>
 
 ## App Architecture
