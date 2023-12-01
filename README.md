@@ -19,11 +19,11 @@ Integrate OAuth authentication to secure user data and generate access tokens. I
 - Automatic Refresh Token Usage:<br>
 Implement a mechanism to automatically refresh access tokens using the OAuth API. This ensures that users remain logged in without the need for manual re-authentication.
 - Home Screen:<br>
--- Retrieve the list of surveys from the API when the application is opened, ensuring users have access to the latest survey information.
--- Allow users to horizontally scroll through the surveys, providing an engaging and interactive experience.
--- Implement a loading animation to indicate to users that the application is fetching the list of surveys. This provides feedback and enhances the user experience during data retrieval.
--- Dynamically generate a navigation indicator list (bullets) based on the API response. These indicators should represent the number of available surveys, assisting users in understanding the overall survey count and their current position within the survey list.
--- Local cashing function.
+  - Retrieve the list of surveys from the API when the application is opened, ensuring users have access to the latest survey information.
+  - Allow users to horizontally scroll through the surveys, providing an engaging and interactive experience.
+  - Implement a loading animation to indicate to users that the application is fetching the list of surveys. This provides feedback and enhances the user experience during data retrieval.
+  - Dynamically generate a navigation indicator list (bullets) based on the API response. These indicators should represent the number of available surveys, assisting users in understanding the overall survey count and their current position within the survey list.
+  - Local cashing function.
 
 <br><br>
 
