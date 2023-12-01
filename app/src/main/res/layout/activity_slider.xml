@@ -19,11 +19,20 @@
             android:id="@+id/nav_view"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_gravity="end"
+            android:layout_gravity="start"
             android:fitsSystemWindows="true"
             android:background="@drawable/side_nav_bar"
             app:itemTextColor="@color/white"
             app:headerLayout="@layout/nav_header_slider"
-            app:menu="@menu/activity_main_drawer" />
+            app:menu="@menu/activity_main_drawer">
+
+            <TextView
+                android:id="@+id/build_version"
+                style="@style/TextViewPara"
+                android:padding="@dimen/margin_medium"
+                android:layout_marginBottom="50dp"
+                android:layout_gravity="bottom|start"/>
+
+        </com.google.android.material.navigation.NavigationView>
     </androidx.drawerlayout.widget.DrawerLayout>
 </layout>
