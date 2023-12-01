@@ -55,7 +55,9 @@
                 android:layout_margin="0dp"
                 android:fontFamily="@font/poppins_bold"
                 android:paddingStart="@dimen/margin_medium"
+                android:paddingEnd="@dimen/margin_medium"
                 android:text="@string/today"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/date" />
 
@@ -66,7 +68,8 @@
                 android:elevation="@dimen/default_elevation"
                 android:fitsSystemWindows="true"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:contentDescription="@string/profileimage" />
 
             <ImageButton
                 android:id="@+id/btn_next"
@@ -79,20 +82,16 @@
                 android:fitsSystemWindows="true"
                 android:src="@drawable/ic_next"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                android:contentDescription="@string/fabbutton" />
 
-            <me.relex.circleindicator.CircleIndicator3
-                android:id="@+id/indicator"
-                android:layout_width="0dp"
-                android:layout_height="20dp"
-                android:layout_marginBottom="220dp"
-                app:ci_drawable="@drawable/circle_indicator_white"
-                app:ci_drawable_unselected="@drawable/circle_indicator_gray"
-                app:ci_gravity="center|start"
-                app:ci_height="@dimen/margin_low"
-                app:ci_margin="@dimen/margin_low"
-                app:ci_orientation="horizontal"
-                app:ci_width="@dimen/margin_low"
+            <com.nimble.ui.common.CircleIndicatorView
+                android:id="@+id/circle_indicator_view"
+                android:layout_marginStart="@dimen/margin_medium"
+                android:layout_marginEnd="@dimen/margin_medium"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginBottom="200dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />

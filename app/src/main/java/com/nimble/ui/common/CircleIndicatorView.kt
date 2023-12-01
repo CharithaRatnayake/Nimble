@@ -1,14 +1,15 @@
 package com.nimble.ui.common
 
 import android.content.Context
-import android.graphics.Color
+import android.graphics.drawable.Drawable
+import android.os.Handler
+import android.os.Looper
 import android.util.AttributeSet
-import android.util.TypedValue
-import android.view.Gravity
+import android.view.View
 import android.widget.HorizontalScrollView
+import android.widget.ImageView
 import android.widget.LinearLayout
-import androidx.appcompat.widget.AppCompatImageView
-import androidx.core.view.forEachIndexed
+import androidx.core.content.ContextCompat
 import com.nimble.R
 
 /**
@@ -18,81 +19,79 @@ import com.nimble.R
  * @copyright
  */
 class CircleIndicatorView @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
+    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : HorizontalScrollView(context, attrs, defStyleAttr) {
 
-    private var indicatorContainer: LinearLayout
+    companion object {
+        private const val CIRCLE_SIZE = 20
+        private const val CIRCLE_SPACING = 4
+        private const val SMOOTH_SCROLL_DELAY = 100L
+    }
+
+    private val container: LinearLayout
 
     init {
-        indicatorContainer = LinearLayout(context)
-        indicatorContainer.orientation = LinearLayout.HORIZONTAL
-        indicatorContainer.gravity = Gravity.START
-        addView(indicatorContainer)
+        container = LinearLayout(context)
+        container.orientation = LinearLayout.HORIZONTAL
+        addView(container)
     }
 
-    fun setCircleCount(count: Int) {
-        indicatorContainer.removeAllViews()
-
-        for (i in 0 until count) {
-            val circle = createCircleIndicator()
-            indicatorContainer.addView(circle)
+    fun addCircles(size: Int) {
+        container.removeAllViews()
+        for (i in 0 until size) {
+            val circle = createUnSelectedCircleDrawable()
+            addCircleView(circle)
         }
     }
 
-    fun setSelectedPosition(position: Int) {
-        indicatorContainer.forEachIndexed { index, view ->
-            indicatorContainer.addView(createCircleIndicator(), index)
+    fun selectCircles(position: Int) {
+        for (i in 0 until container.childCount) {
+            val circle = container.getChildAt(i)
+            setUnselectedDrawable(circle)
         }
+        val circle = container.getChildAt(position)
+        setSelectedDrawable(circle)
 
-        indicatorContainer.addView(createSelectedCircleIndicator(), position)
-        smoothScrollToPosition(position)
+        scrollToCirclePosition(position)
     }
 
-    private fun createCircleIndicator(): AppCompatImageView {
-        val circleSize = dpToPx(16) // Set your desired size
-        val circleMargin = dpToPx(4) // Set your desired margin
-
-        val circle = AppCompatImageView(context)
-        val params = LinearLayout.LayoutParams(circleSize, circleSize)
-        params.setMargins(circleMargin, 0, circleMargin, 0)
-        circle.layoutParams = params
-        circle.setImageResource(R.drawable.circle_unselected) // Create a drawable for unselected state
-
-        return circle
-    }
-
-    private fun createSelectedCircleIndicator(): AppCompatImageView {
-        val circleSize = dpToPx(16) // Set your desired size
-        val circleMargin = dpToPx(4) // Set your desired margin
-
-        val circle = AppCompatImageView(context)
-        val params = LinearLayout.LayoutParams(circleSize, circleSize)
-        params.setMargins(circleMargin, 0, circleMargin, 0)
-        circle.layoutParams = params
-        circle.setImageResource(R.drawable.circle_selected) // Create a drawable for unselected state
-        circle.setColorFilter(Color.WHITE)
-
-        circle.setOnClickListener {
-            // Handle click event, e.g., scroll to the selected position
-            val position = indicatorContainer.indexOfChild(it)
-            smoothScrollToPosition(position)
+    private fun setUnselectedDrawable(circle: View?) {
+        circle?.let { imageView ->
+            (imageView as ImageView).setImageDrawable(createUnSelectedCircleDrawable())
         }
-
-        return circle
     }
 
-    private fun smoothScrollToPosition(position: Int) {
-        val targetScrollX = position * (width / indicatorContainer.childCount)
-        smoothScrollTo(targetScrollX, 0)
+    private fun setSelectedDrawable(circle: View?) {
+        circle?.let { imageView ->
+            (imageView as ImageView).setImageDrawable(createSelectedCircleDrawable())
+        }
     }
 
-    private fun dpToPx(dp: Int): Int {
-        return TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            dp.toFloat(),
-            resources.displayMetrics
-        ).toInt()
+    private fun createUnSelectedCircleDrawable(): Drawable {
+        return ContextCompat.getDrawable(context, R.drawable.circle_unselected)!!
+    }
+
+    private fun createSelectedCircleDrawable(): Drawable {
+        return ContextCompat.getDrawable(context, R.drawable.circle_selected)!!
+    }
+
+    private fun addCircleView(circleDrawable: Drawable) {
+        val circleImageView = ImageView(context)
+        circleImageView.setImageDrawable(circleDrawable)
+
+        val layoutParams = LayoutParams(CIRCLE_SIZE, CIRCLE_SIZE)
+        layoutParams.setMargins(CIRCLE_SPACING, 0, CIRCLE_SPACING, 0)
+
+        circleImageView.layoutParams = layoutParams
+
+        // Add your circleImageView to the HorizontalScrollView
+        container.addView(circleImageView)
+    }
+
+    private fun scrollToCirclePosition(position: Int) {
+        // Delay the scroll to ensure the view is properly laid out
+        Handler(Looper.getMainLooper()).postDelayed({
+            smoothScrollTo(position * (CIRCLE_SIZE + CIRCLE_SPACING), 0)
+        }, SMOOTH_SCROLL_DELAY)
     }
 }

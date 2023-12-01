@@ -4,6 +4,7 @@ import android.os.Bundle
 import com.nimble.R
 import com.nimble.base.BaseFragment
 import com.nimble.databinding.FragmentQuestionsBinding
+import com.nimble.ui.main.survey.SurveyActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -12,7 +13,6 @@ class QuestionsFragment :
 
     companion object {
         const val KEY_DATA = "com.nimble.ui.main.questions.KEY_DATA"
-        const val HIGH_IMAGE_QUALITY = "l"
         fun newInstance(id: String) =
             QuestionsFragment().apply {
                 arguments = Bundle().apply {
@@ -31,6 +31,10 @@ class QuestionsFragment :
     }
 
     override fun initUI() {
+        binding.btnClose.setOnClickListener {
+            getCurrentActivity<SurveyActivity>()?.onBackPressed()
+        }
+        showSuccess(getString(R.string.question_alert_message))
     }
 
     override fun initViewModel() {

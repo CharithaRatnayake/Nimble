@@ -61,10 +61,7 @@ class SurveysListFragment :
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
 
-                //Scroll indicator for specific position
-                val width = binding.indicator.width
-                binding.indicator.scrollX =
-                    ((width / surveyList.size) * position) - (binding.indicator.getChildAt(0).width * position)
+                binding.circleIndicatorView.selectCircles(position)
 
                 // Get next page data before the last two positions
                 if (adapter.itemCount == position + 2) {
@@ -160,12 +157,12 @@ class SurveysListFragment :
     private fun loadSurveyListFromCache(dataModel: ArrayList<SurveyAttributeDataModel>) {
         Log.d(javaClass.simpleName, "loadSurveyListFromCache: $dataModel")
         surveyList.addAll(dataModel)
+        binding.circleIndicatorView.addCircles(surveyList.size)
 
         dataModel.forEach {
             val fragment = SurveyInfoFragment.newInstance(it.attributes)
             adapter.addFragment(fragment)
             adapter.notifyDataSetChanged()
-            binding.indicator.setViewPager(binding.pager)
             binding.progressView.stopAnimation()
             binding.swipeRefreshLayout.isRefreshing = false
         }

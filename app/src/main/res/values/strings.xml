@@ -33,4 +33,8 @@
     <string name="start_survey">Start Survey</string>
     <string name="today">Today</string>
     <string name="retry">Retry</string>
+    <string name="question_alert_message">Question section is in progress.</string>
+    <string name="backgroundimage">backgroundImage</string>
+    <string name="profileimage">profileImage</string>
+    <string name="fabbutton">fabButton</string>
 </resources>
