@@ -1,12 +1,12 @@
 # Nimble Android Application (com.nimble)
 
-- minSdk 21
-- targetSdk 34
-- versionCode 1
+- minSdk ```21```
+- targetSdk ```34```
+- versionCode ```1```
 - productFlavors
--- staging
--- production (working env)
--- mock
+  - staging
+  - production (working env)
+  - mock
 
 <br><br>
 
@@ -24,6 +24,14 @@ Implement a mechanism to automatically refresh access tokens using the OAuth API
   - Implement a loading animation to indicate to users that the application is fetching the list of surveys. This provides feedback and enhances the user experience during data retrieval.
   - Dynamically generate a navigation indicator list (bullets) based on the API response. These indicators should represent the number of available surveys, assisting users in understanding the overall survey count and their current position within the survey list.
   - Local cashing function.
+
+<br><br>
+
+## Release
+ 
+| Release version  | Version Code | Url |
+| ------------- | ------------- | |
+| ```1.0.0```  | ```1```  | |
 
 <br><br>
 
