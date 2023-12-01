@@ -148,21 +148,4 @@ abstract class BaseFragment<T : ViewDataBinding>(
         )
         snackbar.show()
     }
-
-    fun Snackbar.gravityTop() {
-        this.view.layoutParams = (this.view.layoutParams as FrameLayout.LayoutParams).apply {
-            gravity = Gravity.TOP
-        }
-    }
-
-    fun getStatusBarHeight(context: Context): Int {
-        val resources: Resources = context.resources
-        val resourceId: Int = resources.getIdentifier("status_bar_height", "dimen", "android")
-        return if (resourceId > 0) {
-            resources.getDimensionPixelSize(resourceId)
-        } else {
-            // Default status bar height if the resource is not found
-            0
-        }
-    }
 }
