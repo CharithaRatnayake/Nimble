@@ -46,7 +46,7 @@ You need to clone the project and open it with the Android Studio IDE(), then bu
 ## App Architecture
 This app used MVVM architecture pattern and below is the main architecture format,
 
-![nimble drawio](https://github.com/CharithaRatnayake/Nimble/assets/23307834/50fb54a6-25e4-405e-a5fd-4969da4ef207)
+![nimble drawio (1)](https://github.com/CharithaRatnayake/Nimble/assets/23307834/434a79c7-efce-45f5-af03-f0e8630ed246)
 
 <br><br>
 
