@@ -179,7 +179,9 @@ class SurveysListFragment :
     private fun loadSurveyListFromCache(dataModel: ArrayList<SurveyAttributeDataModel>) {
         Log.d(javaClass.simpleName, "loadSurveyListFromCache: $dataModel")
         surveyList.addAll(dataModel)
+        val position = binding.circleIndicatorView.position + 1
         binding.circleIndicatorView.addCircles(surveyList.size)
+        binding.circleIndicatorView.selectCircles(position)
 
         dataModel.forEach {
             val fragment = SurveyInfoFragment.newInstance(it.attributes)
