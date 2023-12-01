@@ -5,7 +5,7 @@ import com.nimble.R
 import com.nimble.base.BaseFragment
 import com.nimble.data.SurveyDataModel
 import com.nimble.databinding.FragmentSurveyInfoBinding
-import com.nimble.utils.Helper
+import com.nimble.utils.loadImageView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -40,13 +40,11 @@ class SurveyInfoFragment :
 
     }
 
-    fun loadSurveyData(data: SurveyDataModel) {
+    private fun loadSurveyData(data: SurveyDataModel) {
         binding.title.text = data.title
         binding.description.text = data.description
 
-        Helper.loadImageView(
-            binding.preview.context,
-            binding.preview,
+        binding.preview.loadImageView(
             data.coverImageUrl.plus(HIGH_IMAGE_QUALITY)
         )
     }

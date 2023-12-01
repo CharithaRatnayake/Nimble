@@ -1,11 +1,5 @@
 package com.nimble.ui.auth
 
-import android.os.Build
-import android.os.Bundle
-import android.transition.Explode
-import android.transition.Slide
-import android.view.Gravity
-import android.view.Window
 import com.nimble.R
 import com.nimble.base.BaseActivity
 import com.nimble.databinding.ActivityAuthBinding
@@ -13,6 +7,8 @@ import com.nimble.ui.auth.forgotpassword.ForgotPasswordFragment
 import com.nimble.ui.auth.login.LoginFragment
 import com.nimble.ui.auth.register.RegisterFragment
 import com.nimble.ui.main.SliderActivity
+import com.nimble.utils.startActivity
+import com.nimble.utils.startFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 

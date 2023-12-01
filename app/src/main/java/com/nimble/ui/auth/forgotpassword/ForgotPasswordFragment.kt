@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.nimble.R
 import com.nimble.base.BaseFragment
-import com.nimble.data.Resource1
 import com.nimble.data.http.Resource
 import com.nimble.databinding.FragmentForgotPasswordBinding
 import com.nimble.ui.auth.AuthActivity
@@ -42,6 +41,7 @@ class ForgotPasswordFragment :
 
     override fun initViewModel() {
         viewModel = ViewModelProvider(this)[AuthViewModel::class.java]
+        // Observe the authResetResponse LiveData in the ViewModel
         viewModel.authResetResponse.observe(viewLifecycleOwner) { data ->
             when (data) {
                 is Resource.Loading -> {
@@ -77,6 +77,7 @@ class ForgotPasswordFragment :
             return
         }
 
+        //call reset api
         viewModel.reset(email)
 
     }

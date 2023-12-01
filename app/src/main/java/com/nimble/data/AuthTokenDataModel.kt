@@ -2,7 +2,7 @@ package com.nimble.data
 
 import com.google.gson.annotations.SerializedName
 import com.nimble.base.AppConstants
-import com.nimble.utils.Base64Util
+import com.nimble.utils.base64ToString
 
 /**
  * @file AuthTokenDataModel
@@ -16,8 +16,8 @@ data class AuthTokenDataModel(
     @SerializedName("email") var email: String = "",
     @SerializedName("password") var password: String = "",
     @SerializedName("token") var token: String = "",
-    @SerializedName("client_id") var clientId: String = Base64Util.base64ToString(AppConstants.CLIENT_ID),
-    @SerializedName("client_secret") var clientSecret: String = Base64Util.base64ToString(
+    @SerializedName("client_id") var clientId: String = String().base64ToString(AppConstants.CLIENT_ID),
+    @SerializedName("client_secret") var clientSecret: String = String().base64ToString(
         AppConstants.CLIENT_SECRET
     )
 )

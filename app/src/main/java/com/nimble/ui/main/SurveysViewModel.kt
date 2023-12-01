@@ -23,68 +23,71 @@ class SurveysViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _userProfileResponse = MutableLiveData<Resource<UserResponseDataModel>>()
-
     val userProfileResponse: LiveData<Resource<UserResponseDataModel>> = _userProfileResponse
 
     private val _surveyListResponse = MutableLiveData<Resource<SurveyListResponseDataModel>>()
-
     val surveyListResponse: LiveData<Resource<SurveyListResponseDataModel>> = _surveyListResponse
 
     private val _surveyListCache = MutableLiveData<List<SurveyEntity>>()
-
     val surveyListCache: LiveData<List<SurveyEntity>> = _surveyListCache
 
-    fun getUserProfile() {
+    /**
+     * Initiates the retrieval of the user profile.
+     * Uses [viewModelScope] to launch a coroutine for handling the user profile retrieval operation asynchronously.
+     */
+
+    fun getUserProfile() = viewModelScope.launch {
         Log.d(javaClass.simpleName, "getUserProfile")
 
-        viewModelScope.launch {
-            val response = appRepository.getUserProfile()
-
-            response.let { data ->
-                when (data) {
-                    is Resource.Success -> {
-                        Log.d(javaClass.simpleName, "SUCCESS --> getUserProfile: $data")
-                        _userProfileResponse.value = data
-                    }
-
-                    is Resource.Failure -> {
-                        _userProfileResponse.value = data
-                    }
-
-                    else -> {}
-                }
+        when (val response =
+            appRepository.getUserProfile()) {
+            is Resource.Success -> {
+                Log.d(javaClass.simpleName, "SUCCESS --> getUserProfile: $response")
+                _userProfileResponse.value = response
             }
+
+            is Resource.Failure -> {
+                _userProfileResponse.value = response
+            }
+
+            else -> {}
         }
     }
 
-    fun getRefreshSurveys(initialPage: Int, surveysPageSize: Int) {
-        viewModelScope.launch {
-            localAppRepository.deleteAllSurveys()
+    /**
+     * Initiates the process to refresh surveys by deleting all existing surveys locally
+     * and then fetching new surveys from the remote source.
+     *
+     * @param initialPage The initial page number for survey retrieval.
+     * @param surveysPageSize The number of surveys to retrieve per page.
+     */
+    fun getRefreshSurveys(initialPage: Int, surveysPageSize: Int) = viewModelScope.launch {
+        localAppRepository.deleteAllSurveys()
 
-            getSurveys(initialPage, surveysPageSize)
-        }
+        getSurveys(initialPage, surveysPageSize)
     }
 
-    fun getSurveys(page: Int, pageSize: Int) {
+    /**
+     * Initiates the retrieval of surveys from the remote source for a specified page and page size.
+     *
+     * @param page The page number for survey retrieval.
+     * @param pageSize The number of surveys to retrieve per page.
+     */
+    fun getSurveys(page: Int, pageSize: Int) = viewModelScope.launch {
         Log.d(javaClass.simpleName, "getSurveys + [Page: $page] [Page Size: $pageSize]")
 
-        viewModelScope.launch {
-            val response = appRepository.getSurveys(page, pageSize)
-
-            response.let { data ->
-                when (data) {
-                    is Resource.Success -> {
-                        Log.d(javaClass.simpleName, "SUCCESS --> getSurveys: $data")
-                        setSurveysToCache(data.value.data)
-                    }
-
-                    is Resource.Failure -> {
-                        _surveyListResponse.value = data
-                    }
-
-                    else -> {}
-                }
+        when (val response =
+            appRepository.getSurveys(page, pageSize)) {
+            is Resource.Success -> {
+                Log.d(javaClass.simpleName, "SUCCESS --> getSurveys: $response")
+                setSurveysToCache(response.value.data)
             }
+
+            is Resource.Failure -> {
+                _surveyListResponse.value = response
+            }
+
+            else -> {}
         }
     }
 

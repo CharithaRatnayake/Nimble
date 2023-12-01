@@ -36,6 +36,11 @@ class CircleIndicatorView @JvmOverloads constructor(
         addView(container)
     }
 
+    /**
+     * Adds a specified number of circles to the container.
+     *
+     * @param size The number of circles to add.
+     */
     fun addCircles(size: Int) {
         container.removeAllViews()
         for (i in 0 until size) {
@@ -44,6 +49,11 @@ class CircleIndicatorView @JvmOverloads constructor(
         }
     }
 
+    /**
+     * Selects a circle at the specified position and updates the view accordingly.
+     *
+     * @param position The position of the circle to be selected.
+     */
     fun selectCircles(position: Int) {
         for (i in 0 until container.childCount) {
             val circle = container.getChildAt(i)
@@ -75,6 +85,11 @@ class CircleIndicatorView @JvmOverloads constructor(
         return ContextCompat.getDrawable(context, R.drawable.circle_selected)!!
     }
 
+    /**
+     * Adds a circle ImageView to the container with the specified circle drawable.
+     *
+     * @param circleDrawable The drawable representing the circle to be added.
+     */
     private fun addCircleView(circleDrawable: Drawable) {
         val circleImageView = ImageView(context)
         circleImageView.setImageDrawable(circleDrawable)
@@ -88,6 +103,11 @@ class CircleIndicatorView @JvmOverloads constructor(
         container.addView(circleImageView)
     }
 
+    /**
+     * Scrolls the HorizontalScrollView to the specified circle position.
+     *
+     * @param position The position of the circle to scroll to.
+     */
     private fun scrollToCirclePosition(position: Int) {
         // Delay the scroll to ensure the view is properly laid out
         Handler(Looper.getMainLooper()).postDelayed({

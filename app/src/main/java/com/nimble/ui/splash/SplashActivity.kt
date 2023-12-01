@@ -8,6 +8,7 @@ import com.nimble.base.BaseActivity
 import com.nimble.databinding.ActivitySplashBinding
 import com.nimble.ui.auth.AuthActivity
 import com.nimble.ui.main.SliderActivity
+import com.nimble.utils.startActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 

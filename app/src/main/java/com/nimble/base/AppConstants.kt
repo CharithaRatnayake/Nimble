@@ -33,7 +33,7 @@ class AppConstants {
         //Data store
         const val APP_DATASTORE_NAME = "com.nimble.user_preferences"
         const val APP_DATABASE_NAME = "NimbleDatabase"
-        const val DATASTORE_KEY_IS_LOGGED = "isLogged"
+        const val DATASTORE_KEY_AUTHENTICATED = "authenticated"
         const val DATASTORE_KEY_EXPIRE_IN = "expire_in"
         const val DATASTORE_KEY_ACCESS_TOKEN = "access_token"
         const val DATASTORE_KEY_REFRESH_TOKEN = "refresh_token"

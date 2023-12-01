@@ -14,8 +14,10 @@ import com.nimble.data.local.SurveyEntity
 import com.nimble.databinding.FragmentSurveysListBinding
 import com.nimble.ui.main.SliderActivity
 import com.nimble.ui.main.SurveysViewModel
-import com.nimble.utils.Helper
+import com.nimble.utils.getDateAndTimeForFormat
+import com.nimble.utils.loadCircleImage
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Date
 
 @AndroidEntryPoint
 class SurveysListFragment :
@@ -24,6 +26,7 @@ class SurveysListFragment :
     companion object {
         const val INITIAL_PAGE = 1
         const val SURVEYS_PAGE_SIZE = 8
+        const val DATE_FORMAT = "EEEE, MMMM dd"
 
         fun newInstance() = SurveysListFragment()
     }
@@ -37,7 +40,7 @@ class SurveysListFragment :
 
         binding.progressView.startAnimation()
         adapter = SurveyPagerAdapter(this@SurveysListFragment)
-        binding.date.text = Helper.getCurrentDateAndTime()
+        binding.date.text = Date().getDateAndTimeForFormat(DATE_FORMAT)
         binding.profile.setOnClickListener {
             getCurrentActivity<SliderActivity>()?.openDrawer()
         }
@@ -47,9 +50,11 @@ class SurveysListFragment :
 
         }
         binding.progressView.onClickRetryListener = {
+            //if network failure call new data from the api
             viewModel.getSurveys(INITIAL_PAGE, SURVEYS_PAGE_SIZE)
         }
         binding.swipeRefreshLayout.setOnRefreshListener {
+            //Swipe to refresh function call new data from the api
             binding.progressView.startAnimation()
             viewModel.getRefreshSurveys(INITIAL_PAGE, SURVEYS_PAGE_SIZE)
 
@@ -57,6 +62,7 @@ class SurveysListFragment :
             adapter = SurveyPagerAdapter(this@SurveysListFragment)
             binding.pager.adapter = adapter
         }
+        //view pager adaptor OnPageChangeCallback
         binding.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
@@ -88,6 +94,7 @@ class SurveysListFragment :
 
     override fun initViewModel() {
         viewModel = ViewModelProvider(this)[SurveysViewModel::class.java]
+        // Observe the userProfileResponse LiveData in the ViewModel
         viewModel.userProfileResponse.observe(this) { data ->
             when (data) {
                 is Resource.Loading -> {
@@ -102,6 +109,7 @@ class SurveysListFragment :
                 }
             }
         }
+        // Observe the surveyListCache LiveData in the ViewModel
         viewModel.surveyListCache.observe(this) { data ->
 
             if (data.isEmpty()) {
@@ -110,6 +118,7 @@ class SurveysListFragment :
                 loadCacheData(data)
             }
         }
+        // Observe the surveyListResponse LiveData in the ViewModel
         viewModel.surveyListResponse.observe(this) { data ->
             when (data) {
                 is Resource.Loading -> {
@@ -131,21 +140,29 @@ class SurveysListFragment :
         viewModel.getUserProfile()
     }
 
+    /**
+     * Loads profile data into the UI based on the provided UserDataModel.
+     *
+     * @param data The UserDataModel containing profile information.
+     */
     private fun loadProfileData(data: UserDataModel) {
         Log.d(javaClass.simpleName, "loadProfileData: $data")
-        Helper.loadCircleImageView(binding.profile.context, binding.profile, data.avatarUrl)
+        binding.profile.loadCircleImage(data.avatarUrl)
 
         getCurrentActivity<SliderActivity>()?.loadProfileData(data)
     }
 
+    /**
+     * Loads survey data from cache and transforms it into a list of SurveyAttributeDataModel.
+     *
+     * @param data The list of SurveyEntity retrieved from the cache.
+     */
     private fun loadCacheData(data: List<SurveyEntity>?) {
         Log.d(javaClass.simpleName, "loadCacheData: $data")
         val surveyAttributeDataModelList = arrayListOf<SurveyAttributeDataModel>()
         data?.forEach {
             val surveyDataModel = SurveyDataModel(
-                title = it.title,
-                description = it.description,
-                coverImageUrl = it.coverImageUrl
+                title = it.title, description = it.description, coverImageUrl = it.coverImageUrl
             )
             val surveyAttributeDataModel =
                 SurveyAttributeDataModel(id = it.id, attributes = surveyDataModel)
@@ -154,6 +171,11 @@ class SurveysListFragment :
         loadSurveyListFromCache(surveyAttributeDataModelList)
     }
 
+    /**
+     * Loads survey list from the cache data and updates the UI components accordingly.
+     *
+     * @param dataModel The list of SurveyAttributeDataModel retrieved from the cache.
+     */
     private fun loadSurveyListFromCache(dataModel: ArrayList<SurveyAttributeDataModel>) {
         Log.d(javaClass.simpleName, "loadSurveyListFromCache: $dataModel")
         surveyList.addAll(dataModel)
