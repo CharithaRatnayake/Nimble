@@ -30,7 +30,7 @@ Implement a mechanism to automatically refresh access tokens using the OAuth API
 ## Release
  
 | Release version  | Version Code | Url |
-| ------------- | ------------- | https://github.com/CharithaRatnayake/Nimble |
+| ------------- | ------------- | ------------- |
 | ```1.0.0```  | ```1```  | https://github.com/CharithaRatnayake/Nimble |
 
 <br><br>
