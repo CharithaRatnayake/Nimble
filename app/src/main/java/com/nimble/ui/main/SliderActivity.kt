@@ -6,6 +6,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.ViewModelProvider
+import com.nimble.BuildConfig
 import com.nimble.R
 import com.nimble.base.BaseActivity
 import com.nimble.data.SurveyAttributeDataModel
@@ -70,13 +71,15 @@ class SliderActivity : BaseActivity<ActivitySliderBinding>(R.layout.activity_sli
         val imageView =
             binding.navView.getHeaderView(0).findViewById<ImageView>(R.id.drawer_profile)
         val textView = binding.navView.getHeaderView(0).findViewById<TextView>(R.id.drawer_title)
+        val version = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
+        binding.buildVersion.text = version
 
         imageView.loadCircleImage(data.avatarUrl)
         textView.text = data.name
     }
 
     fun openDrawer() {
-        binding.drawerLayout.openDrawer(GravityCompat.END)
+        binding.drawerLayout.openDrawer(GravityCompat.START)
     }
 
     fun startSurveyInfoActivity(surveyAttributeDataModel: SurveyAttributeDataModel) {
