@@ -8,8 +8,11 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.nimble.BuildConfig
 import com.nimble.base.AppConstants
+import com.nimble.data.local.SurveyDao
 import com.nimble.data.remote.NimbleAppApi
 import com.nimble.data.remote.NimbleAuthApi
+import com.nimble.di.repository.LocalAppRepository
+import com.nimble.di.repository.UserPreferencesRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -35,6 +38,7 @@ class AppModule {
         name = AppConstants.APP_DATASTORE_NAME
     )
 
+    //HTTP logging interceptor
     @Provides
     fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
         val interceptor = HttpLoggingInterceptor()
@@ -42,13 +46,19 @@ class AppModule {
         return interceptor
     }
 
+    //HTTP Client and set logging interceptor and OAuth API interceptor
     @Provides
-    fun provideOkHttpClient(interceptor: HttpLoggingInterceptor): OkHttpClient {
+    fun provideOkHttpClient(
+        interceptor: HttpLoggingInterceptor,
+        userPreferencesRepository: UserPreferencesRepository
+    ): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(interceptor)
+            .addInterceptor(AuthInterceptor(userPreferencesRepository))
             .build()
     }
 
+    //Create Retrofit client
     @Singleton
     @Provides
     fun provideRetrofit(client: OkHttpClient): Retrofit {
@@ -59,19 +69,19 @@ class AppModule {
             .build()
     }
 
-    @Provides
-    fun provideGson(): Gson = GsonBuilder().create()
-
+    //Create Auth API service
     @Provides
     fun providesAuthApi(retrofit: Retrofit): NimbleAuthApi {
         return retrofit.create(NimbleAuthApi::class.java)
     }
 
+    //Create APP API service
     @Provides
     fun providesAppApi(retrofit: Retrofit): NimbleAppApi {
         return retrofit.create(NimbleAppApi::class.java)
     }
 
+    //Create DataStore preference repo
     @Provides
     @Singleton
     fun provideUserDataStorePreferences(
@@ -79,5 +89,25 @@ class AppModule {
     ): DataStore<Preferences> {
         return applicationContext.userDataStore
     }
+
+    //Database create functions goes here
+    @Singleton
+    @Provides
+    fun provideDatabase(@ApplicationContext appContext: Context) =
+        AppDatabase.getInstance(appContext)
+
+    @Singleton
+    @Provides
+    fun provideCountryDao(db: AppDatabase) = db.surveyDao()
+
+    @Singleton
+    @Provides
+    fun providePostRepository(surveyDao: SurveyDao): LocalAppRepository {
+        return LocalAppRepository(surveyDao)
+    }
+
+    //GSON for json converter class
+    @Provides
+    fun provideGson(): Gson = GsonBuilder().create()
 
 }

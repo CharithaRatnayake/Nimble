@@ -16,4 +16,16 @@
     <string name="error_valid_password">Password length should be minimum 6. Please enter valid password.</string>
     <string name="error_valid_password_retype">Passwords do not match. Please re-type the passwords.\n</string>
     <string name="enter_your_email_to_receive_instructions_for_resetting_your_password">Enter your email to receive instructions for resetting your password.</string>
+    <string name="title_activity_slider">SliderActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="logout">Logout</string>
+    <string name="nav_header_title">Mai</string>
+    <string name="start_survey">Start Survey</string>
 </resources>

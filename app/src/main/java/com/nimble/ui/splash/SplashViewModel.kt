@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nimble.data.local.UserPreferencesRepository
+import com.nimble.di.repository.UserPreferencesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -21,8 +21,8 @@ class SplashViewModel @Inject constructor(
     fun getCacheData() {
 
         viewModelScope.launch {
-            userPreferencesRepository.email.collect { email ->
-                _isLoggedIn.value = !email.isNullOrEmpty()
+            userPreferencesRepository.isLogged.collect { isLoggedIn ->
+                _isLoggedIn.value = isLoggedIn
             }
         }
     }

@@ -10,6 +10,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import com.nimble.ui.common.ProgressDialog
+import java.io.Serializable
 
 /**
  * @file BaseActivity
@@ -22,7 +24,8 @@ abstract class BaseActivity<T : ViewDataBinding>(
     @LayoutRes private val layoutResId: Int
 ): AppCompatActivity() {
 
-    private lateinit var binding: T
+    lateinit var binding: T
+    lateinit var mProgressDialog: ProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +49,7 @@ abstract class BaseActivity<T : ViewDataBinding>(
                         is Long -> putLong(key, value)
                         is CharSequence -> putCharSequence(key, value)
                         is Parcelable -> putParcelable(key, value)
-                        // Add more types as needed
+                        is Serializable -> putSerializable(key, value)
                     }
                 }
             }
@@ -75,5 +78,23 @@ abstract class BaseActivity<T : ViewDataBinding>(
                 addToBackStack(tag)
             }
         }.commit()
+    }
+
+    fun showWaiting() {
+        if (!::mProgressDialog.isInitialized) {
+            mProgressDialog = ProgressDialog()
+        }
+
+        if (!mProgressDialog.isVisible) {
+            mProgressDialog.show(supportFragmentManager, ProgressDialog::class.java.simpleName)
+        }
+    }
+
+    fun dismissWaiting() {
+        if (::mProgressDialog.isInitialized) {
+            if (mProgressDialog.isVisible) {
+                mProgressDialog.dismiss()
+            }
+        }
     }
 }

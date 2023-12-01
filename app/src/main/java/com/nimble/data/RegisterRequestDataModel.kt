@@ -3,7 +3,7 @@ package com.nimble.data
 import com.google.gson.annotations.SerializedName
 
 /**
- * @file UserDataModel
+ * @file RegisterRequestDataModel
  * @date 11/25/2023
  * @brief
  * Created by CharithaRatnayake(jachratnayake@gmail.com) on 11/25/2023.

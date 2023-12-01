@@ -11,7 +11,7 @@ import com.nimble.utils.ValidatorUtil
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
- * @file LoginFragment
+ * @file ForgotPasswordFragment
  * @date 11/25/2023
  * @brief Include common functions for BaseActivity class
  * Created by CharithaRatnayake(jachratnayake@gmail.com) on 11/25/2023.
