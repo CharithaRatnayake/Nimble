@@ -9,13 +9,13 @@ package com.nimble.utils
 class ValidatorUtil {
 
     fun isNameValid(name: String): Boolean {
-        // Name should not be empty
-        return name.isNotBlank()
+        val nameRegex = Regex("^([^\\p{N}\\p{S}\\p{C}\\\\/]{2,20})\$")
+        return nameRegex.matches(name)
     }
 
     fun isEmailValid(email: String): Boolean {
         // Simple email validation using a regular expression
-        val emailRegex = Regex("^\\S+@\\S+\\.\\S+\$")
+        val emailRegex = Regex("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}\$")
         return emailRegex.matches(email)
     }
 

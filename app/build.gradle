@@ -38,21 +38,15 @@ android {
     productFlavors {
         staging {
             // Define properties specific to the free flavor
-            buildConfigField("String", "BASE_URL", "\"https://survey-api-staging.nimblehq.co/api/v1/\"")
-            buildConfigField("String", "CLIENT_ID", "\"6GbE8dhoz519l2N_F99StqoOs6Tcmm1rXgda4q__rIw\"")
-            buildConfigField("String", "CLIENT_SECRET", "\"_ayfIm7BeUAhx2W1OUqi20fwO3uNxfo1QstyKlFCgHw\"")
+            buildConfigField("String", "BASE_URL", "\"https://survey-api-staging.nimblehq.co/api/v12/\"")
         }
         production {
             // Define properties specific to the paid flavor
             buildConfigField("String", "BASE_URL", "\"https://survey-api.nimblehq.co/api/v1/\"")
-            buildConfigField("String", "CLIENT_ID", "\"6GbE8dhoz519l2N_F99StqoOs6Tcmm1rXgda4q__rIw\"")
-            buildConfigField("String", "CLIENT_SECRET", "\"_ayfIm7BeUAhx2W1OUqi20fwO3uNxfo1QstyKlFCgHw\"")
         }
         mock {
             // Define properties specific to the paid flavor
-            buildConfigField("String", "BASE_URL", "\"https://nimble-survey-web-mock.fly.dev/\"")
-            buildConfigField("String", "CLIENT_ID", "\"6GbE8dhoz519l2N_F99StqoOs6Tcmm1rXgda4q__rIw\"")
-            buildConfigField("String", "CLIENT_SECRET", "\"_ayfIm7BeUAhx2W1OUqi20fwO3uNxfo1QstyKlFCgHw\"")
+            buildConfigField("String", "BASE_URL", "\"https://nimble-survey-web-mock.fly.dev2/\"")
         }
     }
     compileOptions {
@@ -82,7 +76,16 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:+'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.7.4'
     implementation 'androidx.navigation:navigation-ui-ktx:2.7.4'
+
+
+    //Unit testing
     testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.mockito:mockito-core:5.1.1'
+    testImplementation 'org.mockito:mockito-android:3.2.4'
+    testImplementation 'org.mockito:mockito-kotlin:3.2.0'
+    testImplementation 'org.mockito.kotlin:mockito-kotlin:3.2.0'
+    testImplementation 'androidx.arch.core:core-testing:2.2.0'
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
@@ -106,13 +109,8 @@ dependencies {
     implementation 'com.google.android.play:core:1.10.3'
     implementation 'androidx.work:work-runtime-ktx:2.7.0'
 
-    implementation 'com.github.akndmr:AirySnackbar:1.0.0'
-
     //DataStore - https://developer.android.com/jetpack/androidx/releases/datastore
     implementation "androidx.datastore:datastore-preferences:1.0.0"
-
-    //https://github.com/mikepenz/MaterialDrawer
-    implementation "com.mikepenz:materialdrawer:9.0.1"
 
     //Glide :Image loading and caching library(https://bumptech.github.io/glide/)
     implementation 'com.github.bumptech.glide:glide:4.14.2'
@@ -121,10 +119,20 @@ dependencies {
 
     //View pager 2 and circleindicator
     implementation "androidx.viewpager2:viewpager2:1.0.0"
-    implementation 'me.relex:circleindicator:2.1.6'
 
     // Room Database
     implementation "androidx.room:room-runtime:2.6.0"
     kapt "androidx.room:room-compiler:2.6.0"
     implementation "androidx.room:room-ktx:2.6.0"
+
+    //Animation libs and uis
+    implementation 'io.supercharge:shimmerlayout:2.1.0'
+    implementation 'com.airbnb.android:lottie:6.2.0'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+
+    //https://github.com/mikepenz/MaterialDrawer
+    implementation "com.mikepenz:materialdrawer:9.0.1"
+
+    //Snack view
+    implementation 'com.github.akndmr:AirySnackbar:1.0.0'
 }

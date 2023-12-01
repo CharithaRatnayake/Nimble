@@ -7,7 +7,10 @@ import com.nimble.ui.auth.forgotpassword.ForgotPasswordFragment
 import com.nimble.ui.auth.login.LoginFragment
 import com.nimble.ui.auth.register.RegisterFragment
 import com.nimble.ui.main.SliderActivity
+import com.nimble.utils.startActivity
+import com.nimble.utils.startFragment
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class AuthActivity : BaseActivity<ActivityAuthBinding>(R.layout.activity_auth) {
@@ -15,7 +18,6 @@ class AuthActivity : BaseActivity<ActivityAuthBinding>(R.layout.activity_auth) {
     override fun initialize() {
 
         startFragment(R.id.container, LoginFragment.newInstance())
-
     }
 
     fun startRegisterFragment() {

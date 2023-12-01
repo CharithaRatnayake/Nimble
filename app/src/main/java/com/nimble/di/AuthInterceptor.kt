@@ -5,6 +5,10 @@ import com.nimble.BuildConfig
 import com.nimble.base.AppConstants
 import com.nimble.data.AuthTokenDataModel
 import com.nimble.data.GrantType
+import com.nimble.data.LoginResponseDataModel
+import com.nimble.data.TokenResponse
+import com.nimble.data.http.Resource
+import com.nimble.data.http.SafeApiCall
 import com.nimble.data.remote.NimbleAuthApi
 import com.nimble.di.repository.UserPreferencesRepository
 import kotlinx.coroutines.flow.first
@@ -25,7 +29,7 @@ import retrofit2.converter.gson.GsonConverterFactory
  */
 class AuthInterceptor(
     private val userPreferencesRepository: UserPreferencesRepository
-) : Interceptor {
+) : Interceptor, SafeApiCall {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
@@ -98,29 +102,35 @@ class AuthInterceptor(
                 refresh_token = it
             )
 
-            try {
-                val authResponse = retrofit.create(NimbleAuthApi::class.java).token(authData)
-
-                if (authResponse.isSuccessful) {
-                    authResponse.body()?.let {
-                        val expireIn = it.data.attributes.expiresIn + it.data.attributes.createdAt
-                        val newAccessToken = it.data.attributes.accessToken
-
-                        userPreferencesRepository.saveUserData(
-                            true,
-                            expireIn,
-                            newAccessToken,
-                            it.data.attributes.refreshToken
-                        )
+            return runBlocking {
+                when (val tokenResponse =
+                    getUpdatedToken(retrofit.create(NimbleAuthApi::class.java), authData)) {
+                    is Resource.Success -> {
+                        saveTokenData(tokenResponse.value.data)
                     }
-                } else {
-                    Log.e(javaClass.simpleName, "Error while refresh the token.")
-                    userPreferencesRepository.clearDataStore()
+
+                    else -> {
+                        Log.e(javaClass.simpleName, "Error refreshing token")
+                        userPreferencesRepository.clearDataStore()
+                    }
                 }
-            } catch (e: Exception) {
-                Log.e(javaClass.simpleName, "Error refreshing token: ${e.message}")
-                userPreferencesRepository.clearDataStore()
             }
         }
+    }
+
+    private suspend fun getUpdatedToken(
+        apiClient: NimbleAuthApi,
+        authData: AuthTokenDataModel
+    ): Resource<LoginResponseDataModel> {
+        return safeApiCall {
+            apiClient.token(authData)
+        }
+    }
+
+    private suspend fun saveTokenData(data: TokenResponse) {
+        val expireIn = data.attributes.expiresIn + data.attributes.createdAt
+        userPreferencesRepository.saveUserData(
+            true, expireIn, data.attributes.accessToken, data.attributes.refreshToken
+        )
     }
 }

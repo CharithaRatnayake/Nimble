@@ -15,7 +15,9 @@ import com.nimble.ui.auth.AuthActivity
 import com.nimble.ui.auth.AuthViewModel
 import com.nimble.ui.main.survey.SurveyActivity
 import com.nimble.ui.main.surveys.SurveysListFragment
-import com.nimble.utils.Helper
+import com.nimble.utils.loadCircleImage
+import com.nimble.utils.startActivity
+import com.nimble.utils.startFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -48,6 +50,7 @@ class SliderActivity : BaseActivity<ActivitySliderBinding>(R.layout.activity_sli
 
         viewModel = ViewModelProvider(this)[AuthViewModel::class.java]
         viewModel.authLogoutResponse.observe(this) { isLogout ->
+            dismissWaiting()
             if (isLogout) {
                 val intent = Intent(this, AuthActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -60,6 +63,7 @@ class SliderActivity : BaseActivity<ActivitySliderBinding>(R.layout.activity_sli
 
     private fun logout() {
         viewModel.logout()
+        showWaiting()
     }
 
     fun loadProfileData(data: UserDataModel) {
@@ -67,7 +71,7 @@ class SliderActivity : BaseActivity<ActivitySliderBinding>(R.layout.activity_sli
             binding.navView.getHeaderView(0).findViewById<ImageView>(R.id.drawer_profile)
         val textView = binding.navView.getHeaderView(0).findViewById<TextView>(R.id.drawer_title)
 
-        Helper.loadCircleImageView(imageView.context, imageView, data.avatarUrl)
+        imageView.loadCircleImage(data.avatarUrl)
         textView.text = data.name
     }
 

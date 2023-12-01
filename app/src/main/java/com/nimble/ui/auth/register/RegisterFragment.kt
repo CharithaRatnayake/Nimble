@@ -3,8 +3,9 @@ package com.nimble.ui.auth.register
 import androidx.lifecycle.ViewModelProvider
 import com.nimble.R
 import com.nimble.base.BaseFragment
-import com.nimble.data.Resource
+import com.nimble.data.http.Resource
 import com.nimble.databinding.FragmentRegisterBinding
+import com.nimble.ui.auth.AuthActivity
 import com.nimble.ui.auth.AuthViewModel
 import com.nimble.utils.ValidatorUtil
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,50 +39,48 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(R.layout.fragment
 
         val validator = ValidatorUtil()
 
-        if (!validator.isNameValid(name)){
+        if (!validator.isNameValid(name)) {
             showError(getString(R.string.error_valid_name))
             return
         }
-        if (!validator.isEmailValid(email)){
+        if (!validator.isEmailValid(email)) {
             showError(getString(R.string.error_valid_email))
             return
         }
-        if (!validator.isPasswordValid(password)){
+        if (!validator.isPasswordValid(password)) {
             showError(getString(R.string.error_valid_password))
             return
         }
-        if (!validator.doPasswordsMatch(password, rePassword)){
+        if (!validator.doPasswordsMatch(password, rePassword)) {
             showError(getString(R.string.error_valid_password_retype))
             return
         }
 
+        //Call register api
         viewModel.register(
-            name, email, password, rePassword
+            name, email, password
         )
     }
 
     override fun initViewModel() {
         viewModel = ViewModelProvider(this)[AuthViewModel::class.java]
+        // Observe the authLoginResponse LiveData in the ViewModel
         viewModel.authLoginResponse.observe(viewLifecycleOwner) { data ->
-            when (data.status) {
-                Resource.Status.LOADING -> {
+            when (data) {
+                is Resource.Loading -> {
                     showWaiting()
                 }
 
-
-
-                Resource.Status.SUCCESS -> {
+                is Resource.Success -> {
                     dismissWaiting()
 
-                    showSuccess("Success")
+                    getCurrentActivity<AuthActivity>()?.startMainActivity()
                 }
 
-                Resource.Status.ERROR -> {
+                is Resource.Failure -> {
                     dismissWaiting()
 
-                    data.data?.let {
-                        it.errors?.firstOrNull()?.detail?.let { showError(it) }
-                    }
+                    showError(data)
                 }
             }
         }

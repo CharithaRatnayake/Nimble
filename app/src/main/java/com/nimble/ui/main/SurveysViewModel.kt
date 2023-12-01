@@ -5,9 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nimble.data.Resource
 import com.nimble.data.SurveyAttributeDataModel
-import com.nimble.data.UserDataModel
+import com.nimble.data.SurveyListResponseDataModel
+import com.nimble.data.UserResponseDataModel
+import com.nimble.data.http.Resource
 import com.nimble.data.local.SurveyEntity
 import com.nimble.di.repository.LocalAppRepository
 import com.nimble.di.repository.RemoteAppRepository
@@ -21,43 +22,72 @@ class SurveysViewModel @Inject constructor(
     private val localAppRepository: LocalAppRepository
 ) : ViewModel() {
 
-    private val _userProfileResponse = MutableLiveData<Resource<UserDataModel>>()
+    private val _userProfileResponse = MutableLiveData<Resource<UserResponseDataModel>>()
+    val userProfileResponse: LiveData<Resource<UserResponseDataModel>> = _userProfileResponse
 
-    val userProfileResponse: LiveData<Resource<UserDataModel>> = _userProfileResponse
+    private val _surveyListResponse = MutableLiveData<Resource<SurveyListResponseDataModel>>()
+    val surveyListResponse: LiveData<Resource<SurveyListResponseDataModel>> = _surveyListResponse
 
-    private val _surveyListCache = MutableLiveData<Resource<List<SurveyEntity>>>()
+    private val _surveyListCache = MutableLiveData<List<SurveyEntity>>()
+    val surveyListCache: LiveData<List<SurveyEntity>> = _surveyListCache
 
-    val surveyListCache: LiveData<Resource<List<SurveyEntity>>> = _surveyListCache
+    /**
+     * Initiates the retrieval of the user profile.
+     * Uses [viewModelScope] to launch a coroutine for handling the user profile retrieval operation asynchronously.
+     */
 
-    fun getUserProfile() {
+    fun getUserProfile() = viewModelScope.launch {
         Log.d(javaClass.simpleName, "getUserProfile")
 
-        viewModelScope.launch {
-            val response = appRepository.getUserProfile()
-
-            if (response.isSuccessful) {
-                val body = response.body()
-                _userProfileResponse.value =
-                    Resource(
-                        Resource.Status.SUCCESS,
-                        body?.userDataModel?.attributes,
-                        response.message()
-                    )
+        when (val response =
+            appRepository.getUserProfile()) {
+            is Resource.Success -> {
+                Log.d(javaClass.simpleName, "SUCCESS --> getUserProfile: $response")
+                _userProfileResponse.value = response
             }
+
+            is Resource.Failure -> {
+                _userProfileResponse.value = response
+            }
+
+            else -> {}
         }
     }
 
-    fun getSurveys(page: Int, pageSize: Int) {
+    /**
+     * Initiates the process to refresh surveys by deleting all existing surveys locally
+     * and then fetching new surveys from the remote source.
+     *
+     * @param initialPage The initial page number for survey retrieval.
+     * @param surveysPageSize The number of surveys to retrieve per page.
+     */
+    fun getRefreshSurveys(initialPage: Int, surveysPageSize: Int) = viewModelScope.launch {
+        localAppRepository.deleteAllSurveys()
+
+        getSurveys(initialPage, surveysPageSize)
+    }
+
+    /**
+     * Initiates the retrieval of surveys from the remote source for a specified page and page size.
+     *
+     * @param page The page number for survey retrieval.
+     * @param pageSize The number of surveys to retrieve per page.
+     */
+    fun getSurveys(page: Int, pageSize: Int) = viewModelScope.launch {
         Log.d(javaClass.simpleName, "getSurveys + [Page: $page] [Page Size: $pageSize]")
 
-        viewModelScope.launch {
-            val response = appRepository.getSurveys(page, pageSize)
-
-            if (response.isSuccessful) {
-                val body = response.body()
-
-                body?.let { setSurveysToCache(it.data) }
+        when (val response =
+            appRepository.getSurveys(page, pageSize)) {
+            is Resource.Success -> {
+                Log.d(javaClass.simpleName, "SUCCESS --> getSurveys: $response")
+                setSurveysToCache(response.value.data)
             }
+
+            is Resource.Failure -> {
+                _surveyListResponse.value = response
+            }
+
+            else -> {}
         }
     }
 
@@ -76,25 +106,17 @@ class SurveysViewModel @Inject constructor(
         viewModelScope.launch {
             localAppRepository.insertSurveys(surveyEntityList)
 
-            _surveyListCache.value =
-                Resource(Resource.Status.SUCCESS, surveyEntityList, "")
+            _surveyListCache.value = surveyEntityList
         }
     }
 
     fun getCacheSurveys() {
         Log.d(javaClass.simpleName, "getCacheSurveys")
 
-        _surveyListCache.value = Resource.loading()
         viewModelScope.launch {
             val surveysList = localAppRepository.getAllSurveys()
 
-            if (surveysList.isEmpty()) {
-                _surveyListCache.value =
-                    Resource(Resource.Status.ERROR, surveysList, "")
-            } else {
-                _surveyListCache.value =
-                    Resource(Resource.Status.SUCCESS, surveysList, "")
-            }
+            _surveyListCache.value = surveysList
         }
     }
 

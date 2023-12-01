@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
         android:fitsSystemWindows="false">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,14 +14,24 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="false">
 
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/pager"
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swipe_refresh_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/pager"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -29,6 +40,27 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="true">
 
+            <TextView
+                android:id="@+id/date"
+                style="@style/TextViewPara"
+                android:layout_margin="@dimen/margin_medium"
+                android:fontFamily="@font/poppins_thicker"
+                android:textAllCaps="true"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView"
+                style="@style/TextViewHeader"
+                android:layout_margin="0dp"
+                android:fontFamily="@font/poppins_bold"
+                android:paddingStart="@dimen/margin_medium"
+                android:paddingEnd="@dimen/margin_medium"
+                android:text="@string/today"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/date" />
+
             <ImageButton
                 android:id="@+id/profile"
                 style="@style/ImageViewProfile"
@@ -36,38 +68,41 @@
                 android:elevation="@dimen/default_elevation"
                 android:fitsSystemWindows="true"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:contentDescription="@string/profileimage" />
 
             <ImageButton
                 android:id="@+id/btn_next"
                 android:layout_width="@dimen/fab_button_size"
                 android:layout_height="@dimen/fab_button_size"
-                android:elevation="@dimen/default_elevation"
                 android:layout_marginEnd="@dimen/margin_medium"
                 android:layout_marginBottom="@dimen/margin_high"
                 android:background="@drawable/bg_fab_button_white"
-                android:src="@drawable/ic_next"
+                android:elevation="@dimen/default_elevation"
                 android:fitsSystemWindows="true"
+                android:src="@drawable/ic_next"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                android:contentDescription="@string/fabbutton" />
 
-            <me.relex.circleindicator.CircleIndicator3
-                android:id="@+id/indicator"
-                android:layout_width="0dp"
-                android:layout_height="20dp"
-                android:layout_marginBottom="220dp"
-                app:ci_drawable="@drawable/circle_indicator_white"
-                app:ci_drawable_unselected="@drawable/circle_indicator_gray"
-                app:ci_gravity="center|start"
-                app:ci_height="@dimen/margin_low"
-                app:ci_margin="@dimen/margin_low"
-                app:ci_orientation="horizontal"
-                app:ci_width="@dimen/margin_low"
+            <com.nimble.ui.common.CircleIndicatorView
+                android:id="@+id/circle_indicator_view"
+                android:layout_marginStart="@dimen/margin_medium"
+                android:layout_marginEnd="@dimen/margin_medium"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginBottom="200dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.nimble.ui.common.SurveyProgressView
+            android:id="@+id/progress_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

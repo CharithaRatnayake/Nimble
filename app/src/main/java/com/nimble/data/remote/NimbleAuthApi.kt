@@ -1,13 +1,11 @@
 package com.nimble.data.remote
 
 import com.nimble.base.AppConstants
-import com.nimble.data.AppResponses
 import com.nimble.data.AuthTokenDataModel
 import com.nimble.data.ForgotPasswordResponseDataModel
 import com.nimble.data.LoginResponseDataModel
 import com.nimble.data.RegisterRequestDataModel
 import com.nimble.data.TokenResponse
-import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
 
@@ -22,16 +20,16 @@ interface NimbleAuthApi {
     @POST(AppConstants.API_PATH_REGISTRATION)
     suspend fun registrations(
         @Body registerRequestDataModel: RegisterRequestDataModel
-    ): Response<AppResponses<TokenResponse>>
+    ): LoginResponseDataModel
 
     @POST(AppConstants.API_PATH_AUTH_TOKEN)
-    suspend fun token(@Body authTokenDataModel: AuthTokenDataModel): Response<LoginResponseDataModel>
+    suspend fun token(@Body authTokenDataModel: AuthTokenDataModel): LoginResponseDataModel
 
     @POST(AppConstants.API_PATH_LOGOUT)
-    suspend fun logout(@Body authTokenDataModel: AuthTokenDataModel): Response<TokenResponse>
+    suspend fun logout(@Body authTokenDataModel: AuthTokenDataModel): TokenResponse
 
     @POST(AppConstants.API_PATH_FORGOT_PASSWORD)
     suspend fun forgotPassword(
         @Body registerRequestDataModel: RegisterRequestDataModel
-    ): Response<ForgotPasswordResponseDataModel>
+    ): ForgotPasswordResponseDataModel
 }

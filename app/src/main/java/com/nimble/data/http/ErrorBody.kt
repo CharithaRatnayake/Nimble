@@ -1,4 +1,4 @@
-package com.nimble.data
+package com.nimble.data.http
 
 import com.google.gson.annotations.SerializedName
 
@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName
  * @brief
  * Created by CharithaRatnayake(jachratnayake@gmail.com) on 11/26/2023.
  */
-open class AppErrorDataModel(
+open class ErrorBody(
     @SerializedName("detail") var detail: String,
     @SerializedName("code") var code: String
 )

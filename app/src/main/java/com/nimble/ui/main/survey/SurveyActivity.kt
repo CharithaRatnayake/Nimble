@@ -7,6 +7,7 @@ import com.nimble.data.SurveyAttributeDataModel
 import com.nimble.databinding.ActivitySurveyBinding
 import com.nimble.ui.main.questions.QuestionsFragment
 import com.nimble.ui.main.surveys.SurveysListFragment
+import com.nimble.utils.startFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

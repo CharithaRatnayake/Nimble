@@ -10,6 +10,11 @@ class AppConstants {
 
     companion object {
 
+        //Http
+        const val HTTP_CONNECT_TIMEOUT = 30L
+        const val HTTP_READ_TIMEOUT = 30L
+        const val HTTP_WRITE_TIMEOUT = 30L
+
         //API paths
         const val API_PATH_REGISTRATION = "registrations"
         const val API_PATH_AUTH_TOKEN = "oauth/token"
@@ -28,11 +33,12 @@ class AppConstants {
         //Data store
         const val APP_DATASTORE_NAME = "com.nimble.user_preferences"
         const val APP_DATABASE_NAME = "NimbleDatabase"
-        const val DATASTORE_KEY_IS_LOGGED = "isLogged"
+        const val DATASTORE_KEY_AUTHENTICATED = "authenticated"
         const val DATASTORE_KEY_EXPIRE_IN = "expire_in"
         const val DATASTORE_KEY_ACCESS_TOKEN = "access_token"
         const val DATASTORE_KEY_REFRESH_TOKEN = "refresh_token"
 
+        //app
         const val CLIENT_ID = "NkdiRThkaG96NTE5bDJOX0Y5OVN0cW9PczZUY21tMXJYZ2RhNHFfX3JJdw=="
         const val CLIENT_SECRET = "X2F5ZkltN0JlVUFoeDJXMU9VcWkyMGZ3TzN1TnhmbzFRc3R5S2xGQ2dIdw=="
     }

@@ -6,7 +6,7 @@ import com.nimble.base.BaseFragment
 import com.nimble.data.SurveyAttributeDataModel
 import com.nimble.data.SurveyDataModel
 import com.nimble.databinding.FragmentSurveyBinding
-import com.nimble.utils.Helper
+import com.nimble.utils.loadImageView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -39,6 +39,9 @@ class SurveyFragment :
                 getCurrentActivity<SurveyActivity>()?.startQuestionsFragment(it.id)
             }
         }
+        binding.backButton.setOnClickListener {
+            getCurrentActivity<SurveyActivity>()?.onBackPressed()
+        }
         dataModel?.let { loadSurveyData(it.attributes) }
     }
 
@@ -46,10 +49,10 @@ class SurveyFragment :
 
     }
 
-    fun loadSurveyData(data: SurveyDataModel) {
+    private fun loadSurveyData(data: SurveyDataModel) {
         binding.title.text = data.title
         binding.description.text = data.description
 
-        Helper.loadImageView(binding.preview.context, binding.preview, data.coverImageUrl.plus(HIGH_IMAGE_QUALITY))
+        binding.preview.loadImageView(data.coverImageUrl.plus(HIGH_IMAGE_QUALITY))
     }
 }

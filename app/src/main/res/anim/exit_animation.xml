@@ -1,0 +1,5 @@
+<!-- res/anim/exit_animation.xml -->
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <translate android:fromXDelta="0" android:toXDelta="0" android:duration="500"/>
+    <!-- Add other animations as needed -->
+</set>

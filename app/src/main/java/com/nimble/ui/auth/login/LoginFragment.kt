@@ -3,12 +3,13 @@ package com.nimble.ui.auth.login
 import androidx.lifecycle.ViewModelProvider
 import com.nimble.R
 import com.nimble.base.BaseFragment
-import com.nimble.data.Resource
+import com.nimble.data.http.Resource
 import com.nimble.databinding.FragmentLoginBinding
 import com.nimble.ui.auth.AuthActivity
 import com.nimble.ui.auth.AuthViewModel
 import com.nimble.utils.ValidatorUtil
 import dagger.hilt.android.AndroidEntryPoint
+
 
 /**
  * @file LoginFragment
@@ -39,24 +40,23 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
 
     override fun initViewModel() {
         viewModel = ViewModelProvider(this)[AuthViewModel::class.java]
+        // Observe the authLoginResponse LiveData in the ViewModel
         viewModel.authLoginResponse.observe(viewLifecycleOwner) { data ->
-            when (data.status) {
-                Resource.Status.LOADING -> {
+            when (data) {
+                is Resource.Loading -> {
                     showWaiting()
                 }
 
-                Resource.Status.SUCCESS -> {
+                is Resource.Success -> {
                     dismissWaiting()
 
                     getCurrentActivity<AuthActivity>()?.startMainActivity()
                 }
 
-                Resource.Status.ERROR -> {
+                is Resource.Failure -> {
                     dismissWaiting()
 
-                    data.data?.let {
-                        it.errors?.firstOrNull()?.detail?.let { showError(it) }
-                    }
+                    showError(data)
                 }
             }
         }
@@ -77,6 +77,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
             return
         }
 
+        //Call login api
         viewModel.login(
             email, password
         )

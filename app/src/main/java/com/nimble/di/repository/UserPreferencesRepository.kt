@@ -23,8 +23,8 @@ class UserPreferencesRepository @Inject constructor(
 ) {
 
     companion object {
-        private val DATASTORE_KEY_IS_LOGGED =
-            booleanPreferencesKey(AppConstants.DATASTORE_KEY_IS_LOGGED)
+        private val DATASTORE_KEY_AUTHENTICATED =
+            booleanPreferencesKey(AppConstants.DATASTORE_KEY_AUTHENTICATED)
         private val DATASTORE_KEY_EXPIRE_IN =
             longPreferencesKey(AppConstants.DATASTORE_KEY_EXPIRE_IN)
         private val DATASTORE_KEY_ACCESS_TOKEN =
@@ -34,14 +34,14 @@ class UserPreferencesRepository @Inject constructor(
     }
 
     suspend fun saveUserData(
-        isLogged: Boolean, expireIn: Long, accessToken: String, refreshToken: String
+        authenticated: Boolean, expireIn: Long, accessToken: String, refreshToken: String
     ) {
         Log.d(
             javaClass.simpleName,
-            "saveUserData: isLogged:$isLogged | expireIn:$expireIn | accessToken:$accessToken | refreshToken:$refreshToken | "
+            "saveUserData: isLogged:$authenticated | expireIn:$expireIn | accessToken:$accessToken | refreshToken:$refreshToken | "
         )
         dataStore.edit { preferences ->
-            preferences[DATASTORE_KEY_IS_LOGGED] = isLogged
+            preferences[DATASTORE_KEY_AUTHENTICATED] = authenticated
             preferences[DATASTORE_KEY_EXPIRE_IN] = expireIn
             preferences[DATASTORE_KEY_ACCESS_TOKEN] = accessToken
             preferences[DATASTORE_KEY_REFRESH_TOKEN] = refreshToken
@@ -54,7 +54,7 @@ class UserPreferencesRepository @Inject constructor(
     }
 
     val isLogged: Flow<Boolean> = dataStore.data.map { preferences ->
-        preferences[DATASTORE_KEY_IS_LOGGED] == true
+        preferences[DATASTORE_KEY_AUTHENTICATED] == true
     }
 
     val expireIn: Flow<Long?> = dataStore.data.map { preferences ->
