@@ -29,6 +29,7 @@ class CircleIndicatorView @JvmOverloads constructor(
     }
 
     private val container: LinearLayout
+    var position: Int = 0
 
     init {
         container = LinearLayout(context)
@@ -55,6 +56,7 @@ class CircleIndicatorView @JvmOverloads constructor(
      * @param position The position of the circle to be selected.
      */
     fun selectCircles(position: Int) {
+        this.position = position
         for (i in 0 until container.childCount) {
             val circle = container.getChildAt(i)
             setUnselectedDrawable(circle)
