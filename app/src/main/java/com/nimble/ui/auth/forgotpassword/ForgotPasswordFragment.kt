@@ -8,7 +8,6 @@ import com.nimble.data.http.Resource
 import com.nimble.databinding.FragmentForgotPasswordBinding
 import com.nimble.ui.auth.AuthActivity
 import com.nimble.ui.auth.AuthViewModel
-import com.nimble.utils.ValidatorUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -54,7 +53,6 @@ class ForgotPasswordFragment :
                     lifecycleScope.launch {
                         showSuccess(data.value.meta.message)
                         delay(SUCCESS_POPUP_DELAY)
-                        getCurrentActivity<AuthActivity>()?.onBackPressed()
                     }
                 }
 
@@ -65,21 +63,23 @@ class ForgotPasswordFragment :
                 }
             }
         }
+        // Observe the isValidCredentials LiveData in the ViewModel
+        viewModel.isValidCredentials.observe(viewLifecycleOwner) { status ->
+            if (status.first) {
+                val email = binding.editTextEmail.text.toString()
+
+                //call reset api
+                viewModel.reset(email)
+            } else {
+                showError(getString(status.second))
+            }
+        }
     }
 
     private fun reset() {
         val email = binding.editTextEmail.text.toString()
 
-        val validator = ValidatorUtil()
-
-        if (!validator.isEmailValid(email)) {
-            showError(getString(R.string.error_valid_email))
-            return
-        }
-
-        //call reset api
-        viewModel.reset(email)
-
+        viewModel.validateCredentials(email)
     }
 
 }

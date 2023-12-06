@@ -7,7 +7,6 @@ import com.nimble.data.http.Resource
 import com.nimble.databinding.FragmentRegisterBinding
 import com.nimble.ui.auth.AuthActivity
 import com.nimble.ui.auth.AuthViewModel
-import com.nimble.utils.ValidatorUtil
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -37,29 +36,7 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(R.layout.fragment
         val password = binding.editTextPassword.text.toString()
         val rePassword = binding.editTextRetypePassword.text.toString()
 
-        val validator = ValidatorUtil()
-
-        if (!validator.isNameValid(name)) {
-            showError(getString(R.string.error_valid_name))
-            return
-        }
-        if (!validator.isEmailValid(email)) {
-            showError(getString(R.string.error_valid_email))
-            return
-        }
-        if (!validator.isPasswordValid(password)) {
-            showError(getString(R.string.error_valid_password))
-            return
-        }
-        if (!validator.doPasswordsMatch(password, rePassword)) {
-            showError(getString(R.string.error_valid_password_retype))
-            return
-        }
-
-        //Call register api
-        viewModel.register(
-            name, email, password
-        )
+        viewModel.validateCredentials(name, email, password, rePassword)
     }
 
     override fun initViewModel() {
@@ -82,6 +59,21 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(R.layout.fragment
 
                     showError(data)
                 }
+            }
+        }
+        // Observe the isValidCredentials LiveData in the ViewModel
+        viewModel.isValidCredentials.observe(viewLifecycleOwner) { status ->
+            if (status.first) {
+                val name = binding.editTextName.text.toString()
+                val email = binding.editTextEmail.text.toString()
+                val password = binding.editTextPassword.text.toString()
+
+                //Call register api
+                viewModel.register(
+                    name, email, password
+                )
+            } else {
+                showError(getString(status.second))
             }
         }
     }

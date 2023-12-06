@@ -7,7 +7,6 @@ import com.nimble.data.http.Resource
 import com.nimble.databinding.FragmentLoginBinding
 import com.nimble.ui.auth.AuthActivity
 import com.nimble.ui.auth.AuthViewModel
-import com.nimble.utils.ValidatorUtil
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -60,27 +59,25 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
                 }
             }
         }
+        // Observe the isValidCredentials LiveData in the ViewModel
+        viewModel.isValidCredentials.observe(viewLifecycleOwner) { status ->
+            if (status.first) {
+                val email = binding.editTextEmail.text.toString()
+                val password = binding.editTextPassword.text.toString()
+
+                //call login api
+                viewModel.login(email, password)
+            } else {
+                showError(getString(status.second))
+            }
+        }
     }
 
     private fun login() {
         val email = binding.editTextEmail.text.toString()
         val password = binding.editTextPassword.text.toString()
 
-        val validator = ValidatorUtil()
-
-        if (!validator.isEmailValid(email)) {
-            showError(getString(R.string.error_valid_email))
-            return
-        }
-        if (!validator.isPasswordValid(password)) {
-            showError(getString(R.string.error_valid_password))
-            return
-        }
-
-        //Call login api
-        viewModel.login(
-            email, password
-        )
+        viewModel.validateCredentials(email, password)
     }
 
 }

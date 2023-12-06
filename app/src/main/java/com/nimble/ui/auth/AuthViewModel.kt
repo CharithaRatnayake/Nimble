@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nimble.R
 import com.nimble.data.AuthTokenDataModel
 import com.nimble.data.ForgotPasswordResponseDataModel
 import com.nimble.data.LoginResponseDataModel
@@ -15,6 +16,7 @@ import com.nimble.data.http.Resource
 import com.nimble.di.repository.LocalAppRepository
 import com.nimble.di.repository.RemoteAuthRepository
 import com.nimble.di.repository.UserPreferencesRepository
+import com.nimble.utils.ValidatorUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
@@ -35,6 +37,9 @@ class AuthViewModel @Inject constructor(
 
     private val _authLogoutResponse = MutableLiveData<Boolean>()
     val authLogoutResponse: LiveData<Boolean> = _authLogoutResponse
+
+    private val _isValidCredentials = MutableLiveData<Pair<Boolean, Int>>()
+    val isValidCredentials: LiveData<Pair<Boolean, Int>> = _isValidCredentials
 
     /**
      * Initiates the login process with the provided [email] and [password].
@@ -175,5 +180,73 @@ class AuthViewModel @Inject constructor(
             accessToken = data.attributes.accessToken,
             refreshToken = data.attributes.refreshToken
         )
+    }
+
+    /**
+     * Validates the email address using a custom validator utility.
+     *
+     * @param email The email address to be validated.
+     * @param password The password is empty check.
+     */
+    fun validateCredentials(email: String, password: String) {
+
+        val validator = ValidatorUtil()
+
+        if (!validator.isEmailValid(email)) {
+            _isValidCredentials.value = Pair(false, R.string.error_valid_email)
+            return
+        }
+        if (password.isEmpty()) {
+            _isValidCredentials.value = Pair(false, R.string.error_valid_login_password)
+            return
+        }
+        _isValidCredentials.value = Pair(true, R.string.success)
+    }
+
+    /**
+     * Validates the email address using a custom validator utility.
+     *
+     * @param email The email address to be validated.
+     */
+    fun validateCredentials(email: String) {
+
+        val validator = ValidatorUtil()
+
+        if (!validator.isEmailValid(email)) {
+            _isValidCredentials.value = Pair(false, R.string.error_valid_email)
+            return
+        }
+        _isValidCredentials.value = Pair(true, R.string.success)
+    }
+
+    /**
+     * Validates the user credentials, including name, email, password, and re-entered password.
+     *
+     * @param name The user's name.
+     * @param email The user's email address.
+     * @param password The user's password.
+     * @param rePassword The re-entered password for confirmation.
+     */
+    fun validateCredentials(name: String, email: String, password: String, rePassword: String) {
+
+        val validator = ValidatorUtil()
+
+        if (!validator.isNameValid(name)) {
+            _isValidCredentials.value = Pair(false, R.string.error_valid_name)
+            return
+        }
+        if (!validator.isEmailValid(email)) {
+            _isValidCredentials.value = Pair(false, R.string.error_valid_email)
+            return
+        }
+        if (!validator.isPasswordValid(password)) {
+            _isValidCredentials.value = Pair(false, R.string.error_valid_password)
+            return
+        }
+        if (!validator.doPasswordsMatch(password, rePassword)) {
+            _isValidCredentials.value = Pair(false, R.string.error_valid_password_retype)
+            return
+        }
+        _isValidCredentials.value = Pair(true, R.string.success)
     }
 }
