@@ -8,12 +8,13 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.nimble.base.AppConstants
+import com.nimble.utils.security.AesCipherProvider
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 /**
- * @file UserPreferences
+ * @file UserPreferencesRepository
  * @date 11/26/2023
  * @brief
  * Created by CharithaRatnayake(jachratnayake@gmail.com) on 11/26/2023.
@@ -38,13 +39,22 @@ class UserPreferencesRepository @Inject constructor(
     ) {
         Log.d(
             javaClass.simpleName,
-            "saveUserData: isLogged:$authenticated | expireIn:$expireIn | accessToken:$accessToken | refreshToken:$refreshToken | "
+            "saveUserData: isLogged:$authenticated | expireIn:$expireIn | accessToken:$accessToken | refreshToken:$refreshToken"
         )
+
+        val encryptedAccessToken = encryptData(accessToken)
+        val encryptedRefreshToken = encryptData(refreshToken)
+
+        Log.d(
+            javaClass.simpleName,
+            "saveUserData encryptData: accessToken:$encryptedAccessToken | refreshToken:$encryptedRefreshToken"
+        )
+
         dataStore.edit { preferences ->
             preferences[DATASTORE_KEY_AUTHENTICATED] = authenticated
             preferences[DATASTORE_KEY_EXPIRE_IN] = expireIn
-            preferences[DATASTORE_KEY_ACCESS_TOKEN] = accessToken
-            preferences[DATASTORE_KEY_REFRESH_TOKEN] = refreshToken
+            preferences[DATASTORE_KEY_ACCESS_TOKEN] = encryptedAccessToken
+            preferences[DATASTORE_KEY_REFRESH_TOKEN] = encryptedRefreshToken
         }
     }
 
@@ -57,23 +67,32 @@ class UserPreferencesRepository @Inject constructor(
         preferences[DATASTORE_KEY_AUTHENTICATED] == true
     }
 
-    val expireIn: Flow<Long?> = dataStore.data.map { preferences ->
-        preferences[DATASTORE_KEY_EXPIRE_IN]
-    }
-
-    val refreshToken: Flow<String?> = dataStore.data.map { preferences ->
-        preferences[DATASTORE_KEY_REFRESH_TOKEN]
-    }
-
     val accessToken: Flow<String?> = dataStore.data.map { preferences ->
-        preferences[DATASTORE_KEY_ACCESS_TOKEN]
+        decryptData(preferences[DATASTORE_KEY_ACCESS_TOKEN])
     }
 
     val authToken: Flow<HashMap<String, String>> = dataStore.data.map { preferences ->
-        hashMapOf(
-            AppConstants.DATASTORE_KEY_EXPIRE_IN to preferences[DATASTORE_KEY_EXPIRE_IN].toString(),
-            AppConstants.DATASTORE_KEY_ACCESS_TOKEN to preferences[DATASTORE_KEY_ACCESS_TOKEN].toString(),
-            AppConstants.DATASTORE_KEY_REFRESH_TOKEN to preferences[DATASTORE_KEY_REFRESH_TOKEN].toString()
+        val expireIn = preferences[DATASTORE_KEY_EXPIRE_IN].toString()
+        val decryptAccessToken = decryptData(preferences[DATASTORE_KEY_ACCESS_TOKEN])
+        val decryptRefreshToken = decryptData(preferences[DATASTORE_KEY_REFRESH_TOKEN])
+
+        Log.d(
+            javaClass.simpleName,
+            "saveUserData decryptData: isLogged:$expireIn | expireIn:$decryptAccessToken | accessToken:$decryptRefreshToken"
         )
+
+        hashMapOf(
+            AppConstants.DATASTORE_KEY_EXPIRE_IN to expireIn,
+            AppConstants.DATASTORE_KEY_ACCESS_TOKEN to decryptAccessToken,
+            AppConstants.DATASTORE_KEY_REFRESH_TOKEN to decryptRefreshToken
+        )
+    }
+
+    private fun encryptData(data: String): String {
+        return AesCipherProvider.encrypt(data)
+    }
+
+    private fun decryptData(encryptedData: String?): String {
+        return encryptedData?.let { AesCipherProvider.decrypt(encryptedData) } ?: ""
     }
 }

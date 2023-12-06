@@ -10,6 +10,12 @@ class AppConstants {
 
     companion object {
 
+        //AES CIPHER
+        const val AES_ALGORITHM: String = "AES"
+        const val AES_TRANSFORMATION: String = "AES/CBC/PKCS5Padding"
+        const val AES_SECRET_KEY: String = "TmltYmxlQXBwS2V5NDMjJQ=="
+        const val AES_INITIALIZATION_VECTOR: String = "TmltYmxlIUAjNDU2NyVeJg=="
+
         //Http
         const val HTTP_CONNECT_TIMEOUT = 30L
         const val HTTP_READ_TIMEOUT = 30L
