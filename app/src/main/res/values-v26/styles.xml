@@ -10,4 +10,11 @@
         <item name="android:inputType">textPassword</item>
         <item name="android:autofillHints">textPassword</item>
     </style>
+
+    <style name="Password" parent="EditText">
+        <item name="android:layout_weight">1</item>
+        <item name="android:inputType">textPassword</item>
+        <item name="android:autofillHints">password</item>
+        <item name="android:background">@null</item>
+    </style>
 </resources>

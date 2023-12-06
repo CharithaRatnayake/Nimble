@@ -11,7 +11,7 @@
             android:id="@+id/progress_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#2c2c2c"
+            android:background="@color/color_dark_gray"
             android:fitsSystemWindows="true"
             android:visibility="gone">
 
@@ -124,7 +124,7 @@
             android:id="@+id/error_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#2c2c2c"
+            android:background="@color/color_dark_gray"
             android:fitsSystemWindows="true"
             android:visibility="gone">
 
@@ -151,7 +151,7 @@
             <Button
                 android:id="@+id/buttonRetry"
                 style="@style/Button"
-                android:layout_width="200dp"
+                android:layout_width="@dimen/_200dp"
                 android:text="@string/retry"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
