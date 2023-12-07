@@ -1,5 +1,6 @@
 package com.nimble.data.local
 
+import androidx.annotation.Keep
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
@@ -10,6 +11,7 @@ import androidx.room.PrimaryKey
  * @brief
  * Created by CharithaRatnayake(jachratnayake@gmail.com) on 11/27/2023.
  */
+@Keep
 @Entity(tableName = "survey", indices = [Index(value = ["id"], unique = true)])
 data class SurveyEntity(
     @PrimaryKey()

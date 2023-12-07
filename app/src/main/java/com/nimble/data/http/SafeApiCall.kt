@@ -1,5 +1,6 @@
 package com.nimble.data.http
 
+import androidx.annotation.Keep
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
@@ -11,6 +12,7 @@ import retrofit2.HttpException
  * @brief
  * Created by CharithaRatnayake(jachratnayake@gmail.com) on 11/28/2023.
  */
+@Keep
 interface SafeApiCall {
     suspend fun <T> safeApiCall(
         apiCall: suspend () -> T

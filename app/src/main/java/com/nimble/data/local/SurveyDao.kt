@@ -1,5 +1,6 @@
 package com.nimble.data.local
 
+import androidx.annotation.Keep
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -12,6 +13,7 @@ import androidx.room.Query
  * Created by CharithaRatnayake(jachratnayake@gmail.com) on 11/27/2023.
  */
 
+@Keep
 @Dao
 interface SurveyDao {
 
