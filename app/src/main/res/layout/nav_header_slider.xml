@@ -14,17 +14,9 @@
 
     <TextView
         android:id="@+id/drawer_title"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:layout_weight="1"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textColor="@color/white"
-        android:textSize="@dimen/text_size_drawer_title"
-        android:fontFamily="@font/poppins_bold"
         app:layout_constraintBottom_toTopOf="@+id/divider"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        style="@style/TextViewDrawer" />
 
     <ImageView
         android:id="@+id/drawer_profile"

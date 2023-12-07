@@ -38,7 +38,7 @@
                 style="@style/TextViewPara"
                 android:layout_width="match_parent"
                 android:layout_marginStart="@dimen/margin_medium"
-                android:layout_marginEnd="88dp"
+                android:layout_marginEnd="@dimen/_88dp"
                 android:fontFamily="@font/poppins_regular"
                 android:gravity="start"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -1,6 +1,5 @@
 package com.nimble.data.http
 
-import com.nimble.data.Resource1
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException

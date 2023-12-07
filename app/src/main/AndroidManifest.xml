@@ -40,5 +40,8 @@
             android:name=".ui.main.survey.SurveyActivity"
             android:screenOrientation="portrait"
             android:exported="false" />
+        <activity
+            android:name=".utils.HiltTestActivity"
+            android:exported="true" />
     </application>
 </manifest>

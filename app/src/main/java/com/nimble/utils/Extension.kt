@@ -1,5 +1,6 @@
 package com.nimble.utils
 
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -9,13 +10,17 @@ import android.util.TypedValue
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.ColorRes
+import androidx.annotation.StyleRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.test.core.app.ActivityScenario
+import androidx.test.core.app.ApplicationProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
 import com.nimble.R
+import dagger.hilt.internal.Preconditions
 import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -155,4 +160,29 @@ fun String.stringToBase64(input: String): String {
 fun String.base64ToString(base64String: String): String {
     val decodedBytes = Base64.decode(base64String, Base64.DEFAULT)
     return String(decodedBytes, Charsets.UTF_8)
+}
+
+inline fun <reified T : Fragment> launchFragmentInHiltContainer(
+    fragmentArgs: Bundle? = null,
+    @StyleRes themeResId: Int = R.style.MainTheme,
+    crossinline action: Fragment.() -> Unit = {}
+) {
+    val startActivityIntent = Intent.makeMainActivity(
+        ComponentName(
+            ApplicationProvider.getApplicationContext(),
+            HiltTestActivity::class.java
+        )
+    )
+    ActivityScenario.launch<HiltTestActivity>(startActivityIntent).onActivity { activity ->
+        val fragment: Fragment = activity.supportFragmentManager.fragmentFactory.instantiate(
+            Preconditions.checkNotNull(T::class.java.classLoader),
+            T::class.java.name
+        )
+        fragment.arguments = fragmentArgs
+        activity.supportFragmentManager
+            .beginTransaction()
+            .add(android.R.id.content, fragment, "")
+            .commitNow()
+        fragment.action()
+    }
 }
