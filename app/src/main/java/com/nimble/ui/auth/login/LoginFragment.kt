@@ -57,6 +57,8 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
 
                     showError(data)
                 }
+
+                else -> {}
             }
         }
         // Observe the isValidCredentials LiveData in the ViewModel
